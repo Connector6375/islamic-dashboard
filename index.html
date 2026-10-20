@@ -399,6 +399,22 @@ a { color: inherit; }
   .tabs .tab { padding: 0 14px; }
   .brand { display: none; }
 }
+
+/* ✏️ content editor (teacher): edit any lesson text; saved edits live in state.edits */
+.editor-layer { display: flex; flex-direction: column; background: var(--ind); }
+.ed-tools { display: flex; gap: 12px; align-items: center; padding: 0 16px 12px; flex-wrap: wrap; }
+.ed-tools .in { flex: 1; min-width: 260px; }
+.ed-body { background: var(--ind); }
+.ed-group { background: #fff; color: var(--txt); border-radius: 16px; margin: 0 0 14px; padding: 6px 16px 12px; }
+.ed-group summary { font-size: 1.25em; font-weight: 900; color: var(--ind); cursor: pointer; padding: 10px 0; min-height: 56px; display: flex; align-items: center; }
+.ed-row { border-top: 2px dashed var(--light); padding: 10px 0; display: flex; flex-direction: column; gap: 6px; }
+.ed-label { font-weight: 800; color: var(--ind); font-size: .95em; }
+.ed-tag { background: var(--yellow); color: var(--ind); border-radius: 10px; padding: 1px 10px; font-size: .9em; }
+.ed-ta { width: 100%; min-height: 56px; border-radius: 12px; border: 2px solid #D6DAEE; padding: 10px 12px; font: inherit; color: var(--txt); resize: vertical; overflow: hidden; background: #FBFBFE; }
+.ed-changed .ed-ta { border-color: var(--yellow); background: #FFF9E8; }
+.ed-changed .ed-label { color: #8A6400; }
+.ed-revert { align-self: flex-start; min-height: 48px; }
+.ed-row [data-revert] { flex: none; }
 </style>
 </head>
 <body>
@@ -411,6 +427,7 @@ a { color: inherit; }
     <div class="tools">
       <button class="icon-btn" id="btn-mute" title="الصوت">🔊</button>
       <button class="icon-btn" id="btn-full" title="ملء الشاشة">⛶</button>
+      <button class="icon-btn" id="btn-edit" title="تعديل النصوص">✏️</button>
       <button class="icon-btn" id="btn-settings" title="الإعدادات">⚙️</button>
     </div>
   </header>
@@ -916,13 +933,14 @@ window.UI = (function () {
 })();
 </script>
   <script>/* js/storage.js */
-﻿// The only module that touches localStorage. Shape: docs/data-schema.md ("Saved state").
+// The only module that touches localStorage. Shape: docs/data-schema.md ("Saved state").
 window.STORE = (function () {
   const KEY = 'cdash-islamic:state';
-  const SCHEMA_VERSION = 1;
+  const SCHEMA_VERSION = 2;
 
   function blank() {
-    return { schemaVersion: SCHEMA_VERSION, currentClass: null, classes: {}, settings: { muted: false } };
+    // v2: added `edits` — the ✏️ content-editor overlay ({ hash: { orig, text } }), see js/editor.js.
+    return { schemaVersion: SCHEMA_VERSION, currentClass: null, classes: {}, settings: { muted: false }, edits: {} };
   }
 
   // Returns a complete state object, or null when `state` is not a dashboard save.
@@ -973,6 +991,187 @@ window.STORE = (function () {
   }
 
   return { load, save, exportBackup, importBackup };
+})();
+</script>
+  <script>/* js/editor.js */
+// ✏️ Content editor: fix typos in any lesson text without touching the data files.
+// Edits are stored in state.edits as an overlay keyed by a content hash of the ORIGINAL string
+// ({ "<hash>": { orig, text } }), so they survive curriculum reordering and ride along with
+// Export/Import backups. editor.apply() swaps the strings into window.CURRICULUM at boot.
+window.EDITOR = (function () {
+  const EDITABLE = new Set(['title', 'subtitle', 'term', 'meaning', 'caption', 'q', 'why', 'text',
+    'a', 'b', 'prompt', 'goal', 'challenge', 'label', 'emoji', 'tip',
+    // keys whose ARRAY items are plain editable strings:
+    'choices', 'objectives', 'checklist', 'items']);
+  // Never edit these (identity, structure, engine wiring).
+  const FORBIDDEN = new Set(['id', 'type', 'img', 'image', 'answerImg', 'icon', 'color', 'box', 'bin', 'target', 'style', 'seconds']);
+
+  // Two FNV-1a rounds with different seeds (~64 bits) → base36 code. Sync + collision-safe at our scale.
+  function fnv(str, seed) {
+    let h = seed >>> 0;
+    for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+    return h;
+  }
+  function hash(str) {
+    return (fnv(str, 0x811c9dc5).toString(36) + fnv(str, 0x01935271).toString(36) + '_' + str.length).slice(0, 20);
+  }
+  const edits = () => (window.APP.state.edits = window.APP.state.edits || {});
+
+  // key = the object key this node came from; array items keep their parent key so plain strings
+  // (choices, objectives, checklist, order items) are patchable.
+  function applyTo(node, key) {
+    if (typeof node === 'string') {
+      if (key && EDITABLE.has(key) && !FORBIDDEN.has(key)) {
+        const e = edits()[hash(node)];
+        if (e && e.text) return e.text;
+      }
+      return node;
+    }
+    if (Array.isArray(node)) { node.forEach((v, i) => { node[i] = applyTo(v, key); }); return node; }
+    if (node && typeof node === 'object') {
+      for (const k of Object.keys(node)) node[k] = applyTo(node[k], k);
+    }
+    return node;
+  }
+  // Apply saved edits to a fresh deep clone of the pristine curriculum (never mutate the original —
+  // the editor and commit() need the untouched original strings as hash keys). Repeatable + idempotent.
+  let pristine = null;
+  function apply() {
+    if (!pristine) pristine = window.CURRICULUM;
+    const clone = typeof structuredClone === 'function'
+      ? structuredClone(pristine)
+      : JSON.parse(JSON.stringify(pristine));
+    window.CURRICULUM_PRISTINE = pristine;
+    window.CURRICULUM = applyTo(clone);
+  }
+
+  function commit(orig, text) {
+    const E = edits();
+    const h = hash(orig);
+    const clean = text.trim();
+    if (!clean || clean === orig) delete E[h];
+    else E[h] = { orig, text: clean };
+    window.APP.save();
+    apply();
+  }
+  const count = () => Object.keys(edits()).length;
+
+  // ---------- editor page ----------
+  function open() {
+    const { esc } = window.UI;
+    const { el, close } = window.UI.layer('editor-layer', () => window.APP.refresh());
+    let query = '';
+
+    // Structured rows: { label, orig, cur, changed } grouped under Arabic section titles.
+    function rows() {
+      const groups = [];
+      let g = null;                      // current lesson's row list (add() fills it)
+      const add = (label, orig) => {
+        if (typeof orig !== 'string' || !orig) return;
+        const e = edits()[hash(orig)];
+        g.push({ label, orig, cur: e && e.text ? e.text : orig, changed: !!(e && e.text && e.text !== orig) });
+      };
+      const editKey = (orig) => { const e = edits()[hash(orig)]; return e && e.text ? e.text : orig; };
+      // list from the PRISTINE data: orig stays the textbook string even after patches are applied
+      for (const grade of Object.values(window.CURRICULUM_PRISTINE || window.CURRICULUM || {})) {
+        for (const unit of grade.units || []) {
+          for (const lesson of unit.lessons || []) {
+            g = [];
+            add('عنوان الدرس', lesson.title);
+            if (lesson.subtitle) add('العنوان الفرعي', lesson.subtitle);
+            (lesson.objectives || []).forEach((o, i) => add(`الهدف ${i + 1}`, o));
+            (lesson.vocabulary || []).forEach((v, i) => { add(`المصطلح ${i + 1}`, v.term); add(`شرح المصطلح ${i + 1}`, v.meaning); });
+            (lesson.figures || []).forEach((f, i) => add(`تعليق صورة الكتاب ${i + 1}`, f.caption));
+            (lesson.activities || []).forEach((a, ai) => {
+              const head = `النشاط ${ai + 1}: ${editKey(a.title)}`;
+              add(`عنوان ${head}`, a.title);
+              (a.questions || []).forEach((q, qi) => {
+                add(`${head} — نص السؤال ${qi + 1}`, q.q);
+                (q.choices || []).forEach((c, ci) => add(`${head} — خيار ${qi + 1}.${ci + 1}`, c));
+                if (q.why) add(`${head} — شرح إجابة السؤال ${qi + 1}`, q.why);
+              });
+              (a.bins || []).forEach((b, bi) => add(`${head} — سلة ${bi + 1}`, b.label));
+              (a.items || []).forEach((it, ii) => {
+                add(`${head} — عنصر ${ii + 1}`, typeof it === 'string' ? it : it.text);
+                if (typeof it === 'object' && it.emoji) add(`${head} — رمز عنصر ${ii + 1}`, it.emoji);
+              });
+              (a.pairs || []).forEach((p, pi) => { add(`${head} — بطاقة أ (زوج ${pi + 1})`, p.a); add(`${head} — بطاقة ب (زوج ${pi + 1})`, p.b); });
+              if (a.prompt) add(`${head} — التعليمات`, a.prompt);
+              for (const ar of Object.values(a.areas || {})) add(`${head} — منطقة: ${editKey(ar.label)}`, ar.label);
+              (a.tasks || []).forEach((t, ti) => { if (t.prompt) add(`${head} — تعليمة ${ti + 1}`, t.prompt); });
+            });
+            if (lesson.handsOn) {
+              const h = lesson.handsOn;
+              add('التطبيق العملي — الهدف', h.goal);
+              (h.steps || []).forEach((s, si) => { add(`خطوة تطبيق ${si + 1}`, s.text); if (s.tip) add(`تلميح الخطوة ${si + 1}`, s.tip); });
+              (h.checklist || []).forEach((c, ci) => add(`بند التحقق ${ci + 1}`, c));
+              if (h.challenge) add('تحدٍّ إضافي', h.challenge);
+            }
+            groups.push({ group: `🎓 ${grade.title} › ${unit.title} › ${lesson.title}`, rows: g });
+          }
+        }
+      }
+      return groups;
+    }
+
+    function rowHtml(r, k) {
+      const match = !query || r.orig.includes(query) || r.cur.includes(query) || r.label.includes(query);
+      if (!match) return '';
+      return `<div class="ed-row ${r.changed ? 'ed-changed' : ''}" data-k="${k}">
+        <div class="ed-label">${esc(r.label)} ${r.changed ? '<span class="ed-tag">مُعدّل</span>' : ''}</div>
+        <textarea class="ed-ta" data-orig="${esc(r.orig)}" rows="1">${esc(r.cur)}</textarea>
+        ${r.changed ? `<button class="btn ghost ed-revert" data-revert>↩ استرجاع الأصل</button>` : ''}
+      </div>`;
+    }
+
+    function render() {
+      const groups = rows();
+      let k = 0;
+      const total = count();
+      el.innerHTML = `<header class="p-hud">
+          <button class="btn ghost" data-exit>✕ تم</button>
+          <div class="p-title">✏️ تعديل نصوص الدروس</div>
+          <span></span>
+        </header>
+        <div class="ed-tools">
+          <input class="in" id="ed-search" placeholder="🔎 ابحث عن النص الذي تريد تصحيحه…" value="${esc(query)}">
+          ${total ? `<button class="btn danger" data-clear>🗑 حذف كل التعديلات (${total})</button>` : '<span class="muted">التعديلات تُحفظ تلقائيًا وتُصدَّر مع النسخة الاحتياطية.</span>'}
+        </div>
+        <main class="p-body ed-body">${groups.map((g) => {
+          const body = g.rows.map((r) => rowHtml(r, k++)).join('');
+          return body ? `<details open class="ed-group"><summary>${esc(g.group)}</summary>${body}</details>` : '';
+        }).join('') || '<p class="muted">لا نتائج للبحث.</p>'}</main>`;
+
+      const search = el.querySelector('#ed-search');
+      search.oninput = () => { query = search.value.trim(); render(); };
+
+      el.querySelectorAll('.ed-ta').forEach((ta) => {
+        const grow = () => { ta.style.height = 'auto'; ta.style.height = Math.max(56, ta.scrollHeight) + 'px'; };
+        grow();
+        let timer;
+        ta.addEventListener('input', () => {
+          grow();
+          clearTimeout(timer);
+          timer = setTimeout(() => commit(ta.dataset.orig, ta.value), 500);
+        });
+        ta.addEventListener('blur', () => { clearTimeout(timer); commit(ta.dataset.orig, ta.value); });
+      });
+      el.querySelectorAll('[data-revert]').forEach((b) => {
+        b.onclick = () => { const ta = b.parentElement.querySelector('.ed-ta'); commit(ta.dataset.orig, ''); render(); };
+      });
+      const clear = el.querySelector('[data-clear]');
+      if (clear) clear.onclick = () => window.UI.confirmBox(`حذف كل التعديلات (${count()}) وارجاع النصوص الأصلية؟`, 'نعم، احذف', () => {
+        window.APP.state.edits = {};
+        window.APP.save();
+        apply();
+        render();
+      }, true);
+      el.querySelector('[data-exit]').onclick = () => { window.APP.save(); close(); };
+    }
+    render();
+  }
+
+  return { apply, open, count };
 })();
 </script>
   <script>/* js/effects.js */
@@ -1898,6 +2097,7 @@ window.SETTINGS = {
   const state = window.STORE.load();
 
   window.APP = { state, save: () => window.STORE.save(state) };
+  window.EDITOR.apply();   // swap teacher's saved text edits into the curriculum data before rendering
   window.FX.muted = !!state.settings.muted;
   document.getElementById('app-title').textContent = window.DASH_CONFIG.appTitle;
 
@@ -1934,6 +2134,7 @@ window.SETTINGS = {
     fullBtn.title = document.fullscreenElement ? 'خروج من ملء الشاشة' : 'ملء الشاشة';
   });
   document.getElementById('btn-settings').addEventListener('click', () => window.SETTINGS.open());
+  document.getElementById('btn-edit').addEventListener('click', () => window.EDITOR.open());
 
   window.addEventListener('hashchange', () => { route(); window.scrollTo(0, 0); });
   window.UI.watchBidi(document.body);
