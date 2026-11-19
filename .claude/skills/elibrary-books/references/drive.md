@@ -44,10 +44,25 @@ Then tell the user the row to add to this table (a skill uploaded to chat can't 
    Do one file per call, smallest first, so a failure on a big file doesn't lose the others.
 4. **Verify.** `get_file_metadata` on the new id: `fileSize` must equal the manifest `size`. Mismatch: say so
    and don't claim success.
-5. **If uploading isn't possible** (the file reference is refused, the Drive connector is not connected, or the
-   environment can't read the path): don't retry in loops. Keep the PDFs where the user can download them
-   (Claude Code: tell them the path and offer to send the files; chat/Cowork: save them to the outputs folder
-   so they appear as downloads), list the exact Drive folder to drop them in, and say what failed.
+5. **Files over the upload limit.** `create_file` refuses a file over **10 MB** when it is called from Claude Code
+   ("over the 10 MB limit … nothing was uploaded"); the e-library's textbooks and guides are usually 20–60 MB, so
+   expect it. Do not retry, split or re-encode the PDF yourself. Upload what fits (plans are ~0.5 MB), then
+   create a **fetch log** in the Resources folder (below) listing every file that did not go up, with its
+   download link, and tell the user plainly which files are missing from Drive and why. Offer: they download
+   the PDFs from the links and drop them in the folder, or ask again from a surface with a higher limit.
+   Try the largest file once in chat/Cowork before assuming it fails there: limits differ by surface.
+6. **Other failures** (file reference refused, Drive connector not connected, path unreadable): same handling as
+   step 5: no retry loops, keep the PDFs where the user can get them (Claude Code: give the path and offer
+   `SendUserFile`; chat/Cowork: save to the outputs folder so they appear as downloads), name the exact Drive
+   folder, say what failed.
+
+## Fetch log (always when something was not uploaded; otherwise optional)
+
+One Google Doc per run in the Resources folder: `create_file` with `contentMimeType: "text/plain"` and
+`textContent`, title `E-library fetch log - <subject> - <grade> - <YYYY-MM-DD>`. For each file: kind, library
+title, library ID, upload date in the library, size and pages, and either «In Drive: <title>» or «NOT IN DRIVE:
+<reason>» with `https://elibrary.moe.edu.kw/api/File/preview/book/<id>` and the title to save it under. Then
+notes (stale edition, term not uploaded yet).
 
 ## Naming
 

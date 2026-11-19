@@ -27,7 +27,9 @@ Python script (`scripts/elibrary.py`) plus the Google Drive connector.
    Report any `note` (e.g. "dated 2025-26 but the current year ends 2027") to the user: the library may not
    have this year's edition yet.
 5. **Drive.** Follow `references/drive.md`: find the project's folder, make sure it has a `Resources` subfolder,
-   skip files already there, upload each PDF, check the size, give the user the links.
+   skip files already there, upload each PDF, check the size, give the user the links. Uploads from Claude Code
+   stop at **10 MB**, so textbooks and guides usually can't go up that way: say so, leave a fetch log in
+   Resources with their download links, and never claim they are in Drive.
 6. **Report** in a short table: kind, term, edition/year, Drive link; plus anything skipped or stale.
 
 ## How files are told apart
@@ -56,7 +58,8 @@ The script searches both and classifies by the Arabic title:
 - Don't overwrite or delete anything in Drive: if a file with the same title exists, skip it and say so
   (replace only if the user asks).
 - Files are for the teacher's own classroom use; mention nothing else about copyright unless asked.
-- Large PDFs (50 MB+) are normal: never print their contents or base64 into the conversation.
+- Large PDFs (50 MB+) are normal: never print their contents or base64 into the conversation, and never
+  tell the user a file is in Drive until `get_file_metadata` shows its size.
 
 ## Files
 
