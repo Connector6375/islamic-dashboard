@@ -128,7 +128,7 @@ svg { flex: none; }
   position: sticky; top: 0; z-index: 10;
   display: flex; align-items: center; gap: 14px;
   padding: 10px clamp(14px, 2vw, 32px);
-  background: var(--topbar); backdrop-filter: blur(8px);
+  background: var(--topbar);
   border-bottom: 2px solid var(--line-soft);
 }
 .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.4em; line-height: 1.2; white-space: nowrap; }
@@ -323,7 +323,7 @@ fieldset.field legend { padding: 0; margin-bottom: 4px; }
 .grade-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
 .gtile {
   border-radius: 28px; padding: 30px 18px; text-align: center; text-decoration: none;
-  background: var(--surface); border-bottom: 10px solid var(--tc); color: var(--ink);
+  background: var(--surface); color: var(--ink);
   display: flex; flex-direction: column; gap: 6px; align-items: center;
 }
 .gtile .ic { font-size: clamp(60px, 8vw, 100px); line-height: 1.1; }
@@ -348,7 +348,7 @@ fieldset.field legend { padding: 0; margin-bottom: 4px; }
 .ltile .n { width: 52px; height: 52px; border-radius: 16px; background: var(--uc); color: var(--on-color); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.4em; }
 .ltile b { font-size: 1.5em; font-weight: 800; line-height: 1.25; }
 .ltile small { color: var(--muted); }
-.ltile .acts { margin-top: auto; font-size: 1.3em; letter-spacing: 4px; }
+.ltile .acts { margin-top: auto; font-size: 1.05em; font-weight: 700; color: var(--ink-soft); }
 .ltile.soon { opacity: .55; }
 
 .sec { display: flex; flex-direction: column; gap: 18px; margin-bottom: 30px; }
@@ -360,7 +360,7 @@ fieldset.field legend { padding: 0; margin-bottom: 4px; }
   min-height: 200px; padding: 26px; border-radius: 28px; background: var(--surface); color: var(--ink);
   display: flex; flex-direction: column; justify-content: space-between; gap: 18px; text-align: start;
 }
-.tile .kind { color: var(--muted); font-size: .95em; font-weight: 600; }
+.tile .kind { color: var(--ink-soft); font-size: 1.15em; font-weight: 700; }
 .tile b { font-size: clamp(26px, 2.2vw, 34px); font-weight: 700; line-height: 1.3; }
 .tile .goal { color: var(--muted); font-size: .95em; line-height: 1.5; }
 .tile .cta { align-self: flex-start; display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 0 24px; border-radius: 16px; background: var(--accent); color: var(--on-accent); font-size: 1.15em; font-weight: 800; }
@@ -381,7 +381,7 @@ fieldset.field legend { padding: 0; margin-bottom: 4px; }
 .ctab[aria-pressed="true"], .ctab.active { background: var(--accent); color: var(--on-accent); }
 /* points about to be awarded, on the result screen */
 .earned { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; width: 100%; }
-.earn-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--surface-2); border-radius: 18px; padding: 10px 16px; border-inline-start: 10px solid var(--gc); font-size: 1.15em; }
+.earn-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--surface-2); border-radius: 18px; padding: 10px 16px; font-size: 1.15em; }
 .earn-row .em { font-size: 1.5em; }
 .earn-row b { font-weight: 800; }
 
@@ -403,8 +403,8 @@ fieldset.field legend { padding: 0; margin-bottom: 4px; }
 .pill-pts { margin-inline-start: auto; background: var(--teal); color: var(--on-teal); border-radius: 999px; padding: 2px 14px; font-weight: 800; direction: ltr; }
 /* answer / pause popup: a compact bar at the bottom (about a third of the screen at most) so the
    question and the right answer stay visible above it. The layer only dims the bottom edge. */
-.p-pop { position: absolute; inset: 0; z-index: 5; display: flex; align-items: flex-end; justify-content: center; padding: 0 12px 12px; background: linear-gradient(to top, var(--overlay), transparent 60%); }
-.p-pop-card { background: var(--surface); color: var(--ink); border: 0; border-radius: 24px; padding: 14px 20px; width: min(1100px, 100%); max-height: 40vh; overflow-y: auto; box-shadow: 0 -6px 24px var(--shadow-lg); display: flex; flex-direction: column; gap: 8px; }
+.p-pop { position: absolute; inset: 0; z-index: 5; display: flex; align-items: flex-end; justify-content: center; padding: 0 12px 12px; pointer-events: none; }
+.p-pop-card { background: var(--surface); color: var(--ink); border: 0; border-radius: 24px; padding: 14px 20px; width: min(1100px, 100%); max-height: 40vh; overflow-y: auto; pointer-events: auto; border: 3px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
 .pop-top { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 16px; }
 .pop-verdict { font-size: clamp(24px, 2.8vw, 36px); font-weight: 800; color: var(--ink); line-height: 1.2; }
 .pop-verdict.ok { color: var(--ok-fg); }
@@ -419,8 +419,6 @@ fieldset.field legend { padding: 0; margin-bottom: 4px; }
 .pop-row .btn.big { min-height: 64px; font-size: 1.15em; padding: 0 28px; border-radius: 18px; }
 /* while the popup is open, the quiz moves to the top and its verdict line (the popup says it) is hidden,
    so the question and the choices (with the right answer marked) are not covered */
-.player.paused .quiz { margin: 4px auto 0; gap: 12px; }
-.player.paused .quiz-q { font-size: clamp(22px, 2.8vw, 36px); padding: 14px 20px; }
 .player.paused .quiz-foot { display: none; }
 /* taps on game controls are ignored while an answer/pause popup is pending or open (no double answers) */
 .player.paused .p-body button { pointer-events: none; }
@@ -468,15 +466,12 @@ fieldset.field legend { padding: 0; margin-bottom: 4px; }
 .game-top { display: flex; justify-content: center; gap: 12px; }
 
 /* quiz */
-.quiz { margin: auto; width: min(1200px, 100%); display: flex; flex-direction: column; gap: 18px; }
+.quiz { margin: 8px auto 0; width: min(1200px, 100%); display: flex; flex-direction: column; gap: 14px; }
 .g-progress { text-align: center; font-weight: 700; color: var(--muted); }
-.quiz-q { background: var(--surface); color: var(--ink); border-radius: 28px; padding: 24px; font-size: clamp(24px, 3.4vw, 46px); font-weight: 800; text-align: center; line-height: 1.5; }
+.quiz-q { background: var(--surface); color: var(--ink); border-radius: 28px; padding: 18px 24px; font-size: clamp(22px, min(3vw, 4.2vh), 40px); font-weight: 800; text-align: center; line-height: 1.5; }
 .quiz-em { display: block; font-size: 1.6em; }
 .quiz-choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
-.choice { --cc: var(--accent); min-height: 84px; border-radius: 22px; background: var(--surface-2); color: var(--ink); font-size: clamp(20px, 2.6vw, 34px); font-weight: 700; padding: 12px 22px; line-height: 1.4; border: 3px solid var(--line-soft); border-inline-start: 12px solid var(--cc); }
-.choice:nth-child(2) { --cc: var(--teal); }
-.choice:nth-child(3) { --cc: var(--blue); }
-.choice:nth-child(4) { --cc: var(--violet); }
+.choice { min-height: 76px; border-radius: 22px; background: var(--surface-2); color: var(--ink); font-size: clamp(20px, min(2.6vw, 3.8vh), 34px); font-weight: 700; padding: 10px 22px; line-height: 1.4; border: 3px solid var(--line-soft); }
 .choice:disabled { opacity: 1; cursor: default; }
 .quiz-choices.answered .choice:not(.ok):not(.no) { opacity: .4; }
 /* right / wrong differ by lightness, a mark and a shake, not by hue alone */
@@ -2588,7 +2583,7 @@ window.GAMES.register('quiz', {
       root.querySelector('.quiz-choices').classList.add('answered');
       btns[q.answer].classList.add('ok');
       if (ok) { score++; ctx.hit(); window.FX.sound('ok'); } else { btns[k].classList.add('no'); window.FX.sound('no'); }
-      root.querySelector('.quiz-foot').innerHTML = `<div class="verdict">${ok ? '✅ إجابة صحيحة!' : '❌ الإجابة الصحيحة باللون الأخضر'}</div>`;
+      root.querySelector('.quiz-foot').innerHTML = `<div class="verdict">${ok ? 'إجابة صحيحة!' : 'الإجابة الصحيحة باللون الأخضر'}</div>`;
       ctx.answered(ok, () => {
         i++;
         if (i < qs.length) show(); else done({ score, max: qs.length });
@@ -2858,7 +2853,7 @@ window.GAMES.register('story', {
   render(root, act, done, ctx) {
     const { esc, shuffle } = window.UI;
     const scenes = act.scenes;
-    const VERDICT = { ok: '✅ قرار موفّق!', no: '❌ قرار غير موفّق' };
+    const VERDICT = { ok: 'قرار موفّق!', no: 'قرار غير موفّق' };
     let score = 0;
     let max = 0;   // decisions met on the path taken
 
@@ -3263,7 +3258,11 @@ window.ACTIVITIES = (function () {
 
   function render(el, parts) {
     const [gradeId, lessonId] = parts || [];
-    const grade = curriculum()[gradeId];
+    let grade = curriculum()[gradeId];
+    if (!grade && cfg().grades.length === 1) {   // a single grade: no picker, the lessons are the home page
+      grade = curriculum()[cfg().grades[0].id];
+      if (grade) { grade.id = cfg().grades[0].id; return gradePage(el, grade); }
+    }
     if (!grade) return hub(el);
     grade.id = gradeId;   // lesson links are built from grade.id; curriculum files don't repeat their key
     const found = lessonId && findLesson(grade, lessonId);
@@ -3293,20 +3292,23 @@ window.ACTIVITIES = (function () {
 
   function gradePage(el, grade) {
     window.UI.setTitle(grade.title);
-    el.innerHTML = `<div class="lesson-head"><a class="back-link" href="#activities">${CHEV}<span>الأنشطة</span></a><h1>${grade.emoji} ${esc(grade.title)}</h1></div>
+    const several = cfg().grades.length > 1;
+    el.innerHTML = `<div class="lesson-head">${several ? `<a class="back-link" href="#activities">${CHEV}<span>الأنشطة</span></a>` : ''}<h1>${esc(grade.title)}</h1></div>
       ${grade.units.map((u) => `
         <section class="unit" style="--uc:${u.color}">
-          <h2 class="unit-head">${u.emoji} ${esc(u.title)} <small>${esc(u.subtitle || '')}</small></h2>
+          <h2 class="unit-head">${esc(u.title)} <small>${esc(u.subtitle || '')}</small></h2>
           <div class="lesson-grid">${u.lessons.map((l, i) => lessonTile(grade, l, i)).join('')}</div>
         </section>`).join('')}`;
   }
 
   function lessonTile(grade, l, i) {
     const soon = !l.activities;
-    const icons = soon ? '' : l.activities.map((a) => window.GAMES.get(a.type).icon).join('') + (l.handsOn ? '🛠️' : '');
+    const count = soon ? 0 : l.activities.length;
+    const word = count === 1 ? 'نشاط واحد' : count === 2 ? 'نشاطان' : count <= 10 ? SB().ar(count) + ' أنشطة' : SB().ar(count) + ' نشاطًا';
+    const info = soon ? '' : word + (l.handsOn ? ' · تطبيق عملي' : '');
     return `<a class="ltile ${soon ? 'soon' : ''}" ${soon ? '' : `href="#activities/${grade.id}/${l.id}"`}>
       <span class="n">${SB().ar(i + 1)}</span><b>${esc(l.title)}</b><small>${esc(l.subtitle || '')}</small>
-      <span class="acts">${soon ? '⏳ قريبًا' : icons}</span></a>`;
+      <span class="acts">${soon ? 'قريبًا' : info}</span></a>`;
   }
 
   function lessonPage(el, grade, unit, lesson) {
@@ -3405,10 +3407,10 @@ window.ACTIVITIES = (function () {
           <span class="em">${esc(g.emoji)}</span>${esc(g.name)}</button>`).join('');
       box.innerHTML = `<div class="p-pop-card" role="status">
         <div class="pop-top">
-          <div class="pop-verdict ${info.pause ? '' : info.ok ? 'ok' : 'no'}">${info.pause ? '⏸ متوقف مؤقتًا' : info.ok ? ((info.verdict && info.verdict.ok) || '✅ إجابة صحيحة!') : ((info.verdict && info.verdict.no) || '❌ إجابة خاطئة')}</div>
+          <div class="pop-verdict ${info.pause ? '' : info.ok ? 'ok' : 'no'}">${info.pause ? '⏸ متوقف مؤقتًا' : info.ok ? ((info.verdict && info.verdict.ok) || 'إجابة صحيحة!') : ((info.verdict && info.verdict.no) || 'إجابة خاطئة')}</div>
           ${credited ? `<div class="pop-credit" style="--gc:${credited.color}"><span class="ltr">+1</span> ${esc(credited.emoji)} ${esc(credited.name)}</div>` : ''}
         </div>
-        ${info.note ? `<p class="why">💡 ${esc(info.note)}</p>` : ''}
+        ${info.note ? `<p class="why">${esc(info.note)}</p>` : ''}
         <div class="pop-row">
           ${gid ? `<span class="pop-ask">من يجيب الآن؟</span><div class="pop-groups">${groupsHtml()}</div>` : ''}
           <button class="btn big yellow" data-continue data-autofocus>متابعة ◀</button>
