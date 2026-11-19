@@ -20,7 +20,11 @@
 **الواجهة:** تصميم داكن بأزرار كبيرة للمس وخط «Baloo Bhaijaan 2» (مضمّن داخل الملف، يعمل دون إنترنت). لوحة النقاط في صفحة واحدة: الصفوف على الجانب ومجموعات الصف المختار بجانبها.
 **الإعدادات** (⚙️): إضافة صفوف وحذفها وإعادة تسميتها، وتعديل مجموعات كل صف (٢–٦: الاسم، الشعار، اللون)، ونسخة احتياطية، وتصفير النقاط.
 
-**الفتح:** https://<owner>.github.io/islamic-dashboard/ — أو تنزيل `index.html` وفتحه بنقرة مزدوجة (يعمل دون إنترنت بالكامل).
+**الفتح:** https://connector6375.github.io/islamic-dashboard/ — أو تنزيل `index.html` وفتحه بنقرة مزدوجة (يعمل دون إنترنت بالكامل).
+
+**نسخة على جهازك تتحدّث تلقائيًا من GitHub:** شغّل مرة واحدة (ويندوز، PowerShell):
+`powershell -ExecutionPolicy Bypass -File tools\sync-from-github.ps1 -Target "<المجلد>" -Install`
+فيُنزَّل آخر ما على الفرع إلى المجلد ويتجدّد كل ١٥ دقيقة. على ماك/لينكس: `sh tools/sync-from-github.sh "<المجلد>"` مع cron. لا يلزم Git ولا حساب (المستودع عام)، ولا يحذف شيئًا من المجلد.
 
 ---
 
@@ -39,3 +43,9 @@ automatically (points kept, group colours mapped to the new palette).
 ## Updating the lessons
 The dashboard's source project (curriculum data, game engines, build tool, textbook crops) lives on the
 teacher's machine; this repository contains the built output. Rebuild → replace `index.html` → push.
+
+## Mirroring to your computer
+`tools/sync-from-github.ps1` (Windows) and `tools/sync-from-github.sh` (Mac/Linux) copy the latest commit of a
+public branch into a local folder: no Git or login needed, nothing in the folder is deleted. With `-Install`
+the PowerShell script also schedules itself (default every 15 minutes). Point `-Target` at a folder that Google
+Drive for desktop syncs and the files reach Drive too, without Drive's 10 MB upload limit.
