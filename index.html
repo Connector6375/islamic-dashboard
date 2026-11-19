@@ -597,7 +597,15 @@ fieldset.field legend { padding: 0; margin-bottom: 4px; }
 .ed-tools .in { flex: 1; min-width: 260px; }
 .ed-body { background: var(--bg); }
 .ed-group { background: var(--surface); color: var(--ink); border-radius: 20px; margin: 0 0 14px; padding: 6px 18px 12px; }
-.ed-group summary { font-size: 1.25em; font-weight: 800; color: var(--accent-2); cursor: pointer; padding: 10px 0; min-height: 56px; display: flex; align-items: center; }
+.ed-group summary { font-size: 1.25em; font-weight: 800; color: var(--accent-2); cursor: pointer; padding: 10px 0; min-height: 56px; display: flex; align-items: center; gap: 10px; list-style: none; }
+.ed-group summary::-webkit-details-marker, .ed-sub summary::-webkit-details-marker { display: none; }
+.ed-group summary::before, .ed-sub summary::before { content: ''; flex: none; width: 12px; height: 12px; border-inline-end: 3px solid currentColor; border-bottom: 3px solid currentColor; transform: rotate(45deg); transition: transform .15s; }
+.ed-group[open] > summary::before, .ed-sub[open] > summary::before { transform: rotate(-45deg); }
+.ed-sum-t { flex: 1; min-width: 0; }
+.ed-count { flex: none; min-width: 2.2em; text-align: center; border-radius: 999px; background: var(--surface-3); color: var(--ink-soft); font-size: .8em; font-weight: 700; padding: 2px 10px; }
+.ed-sub { margin: 8px 0 0; border-radius: 16px; background: var(--surface-2); padding: 0 14px 6px; }
+.ed-sub > summary { font-size: 1.05em; font-weight: 700; color: var(--ink); cursor: pointer; min-height: 52px; display: flex; align-items: center; gap: 10px; list-style: none; }
+.ed-sub .ed-row:first-of-type { border-top: 0; }
 .ed-row { border-top: 2px dashed var(--line-soft); padding: 10px 0; display: flex; flex-direction: column; gap: 6px; }
 .ed-label { font-weight: 700; color: var(--ink-soft); font-size: .95em; }
 .ed-tag { background: var(--accent); color: var(--on-accent); border-radius: 10px; padding: 1px 10px; font-size: .9em; }
@@ -2288,7 +2296,9 @@ window.EDITOR = (function () {
     // Structured rows: { label, orig, cur, changed } grouped under Arabic section titles.
     function rows() {
       const groups = [];
-      let g = null;                      // current lesson's row list (add() fills it)
+      let g = null;                      // current section's row list (add() fills it)
+      let secs = null;                   // current lesson's sections
+      const section = (name) => { g = []; secs.push({ name, rows: g }); };
       const add = (label, orig) => {
         if (typeof orig !== 'string' || !orig) return;
         const e = edits()[hash(orig)];
@@ -2299,7 +2309,8 @@ window.EDITOR = (function () {
       for (const grade of Object.values(window.CURRICULUM_PRISTINE || window.CURRICULUM || {})) {
         for (const unit of grade.units || []) {
           for (const lesson of unit.lessons || []) {
-            g = [];
+            secs = [];
+            section('بيانات الدرس: العنوان والأهداف والمصطلحات');
             add('عنوان الدرس', lesson.title);
             if (lesson.subtitle) add('العنوان الفرعي', lesson.subtitle);
             (lesson.objectives || []).forEach((o, i) => add(`الهدف ${i + 1}`, o));
@@ -2307,6 +2318,7 @@ window.EDITOR = (function () {
             (lesson.figures || []).forEach((f, i) => add(`تعليق صورة الكتاب ${i + 1}`, f.caption));
             (lesson.activities || []).forEach((a, ai) => {
               const head = `النشاط ${ai + 1}: ${editKey(a.title)}`;
+              section(head);
               add(`عنوان ${head}`, a.title);
               (a.questions || []).forEach((q, qi) => {
                 add(`${head} — نص السؤال ${qi + 1}`, q.q);
@@ -2325,12 +2337,13 @@ window.EDITOR = (function () {
             });
             if (lesson.handsOn) {
               const h = lesson.handsOn;
+              section('التطبيق العملي');
               add('التطبيق العملي — الهدف', h.goal);
               (h.steps || []).forEach((s, si) => { add(`خطوة تطبيق ${si + 1}`, s.text); if (s.tip) add(`تلميح الخطوة ${si + 1}`, s.tip); });
               (h.checklist || []).forEach((c, ci) => add(`بند التحقق ${ci + 1}`, c));
               if (h.challenge) add('تحدٍّ إضافي', h.challenge);
             }
-            groups.push({ group: `🎓 ${grade.title} › ${unit.title} › ${lesson.title}`, rows: g });
+            groups.push({ group: `🎓 ${unit.title} › ${lesson.title}`, sections: secs.filter((x) => x.rows.length) });
           }
         }
       }
@@ -2347,6 +2360,13 @@ window.EDITOR = (function () {
       </div>`;
     }
 
+    const opened = new Set();            // keys of the <details> the teacher opened (kept across redraws)
+    el.addEventListener('toggle', (e) => {
+      const d = e.target;
+      if (!d.dataset || !d.dataset.key || query) return;   // while searching everything is open; don't remember that
+      if (d.open) opened.add(d.dataset.key); else opened.delete(d.dataset.key);
+    }, true);
+
     function render() {
       const groups = rows();
       let k = 0;
@@ -2360,9 +2380,24 @@ window.EDITOR = (function () {
           <input class="in" id="ed-search" aria-label="بحث في نصوص الدروس" placeholder="🔎 ابحث عن النص الذي تريد تصحيحه…" value="${esc(query)}">
           ${total ? `<button class="btn danger" data-clear>🗑 حذف كل التعديلات (${total})</button>` : '<span class="muted">التعديلات تُحفظ تلقائيًا وتُصدَّر مع النسخة الاحتياطية.</span>'}
         </div>
-        <main class="p-body ed-body">${groups.map((g) => {
-          const body = g.rows.map((r) => rowHtml(r, k++)).join('');
-          return body ? `<details open class="ed-group"><summary>${esc(g.group)}</summary>${body}</details>` : '';
+        <main class="p-body ed-body">${groups.map((g, gi) => {
+          let lessonRows = 0;
+          let lessonChanged = 0;
+          const subs = g.sections.map((sec, si) => {
+            const shown = [];
+            const body = sec.rows.map((r) => { const h = rowHtml(r, k++); if (h) shown.push(r); return h; }).join('');
+            if (!body) return '';
+            const ch = shown.filter((r) => r.changed).length;
+            lessonRows += shown.length;
+            lessonChanged += ch;
+            const key = `L${gi}S${si}`;
+            return `<details class="ed-sub" data-key="${key}" ${query || opened.has(key) ? 'open' : ''}>
+              <summary><span class="ed-sum-t">${esc(sec.name)}</span>${ch ? `<span class="ed-tag">${ch} مُعدّل</span>` : ''}<span class="ed-count">${shown.length}</span></summary>${body}</details>`;
+          }).join('');
+          if (!subs) return '';
+          const key = `L${gi}`;
+          return `<details class="ed-group" data-key="${key}" ${query || opened.has(key) ? 'open' : ''}>
+            <summary><span class="ed-sum-t">${esc(g.group)}</span>${lessonChanged ? `<span class="ed-tag">${lessonChanged} مُعدّل</span>` : ''}<span class="ed-count">${lessonRows}</span></summary>${subs}</details>`;
         }).join('') || '<p class="muted">لا نتائج للبحث.</p>'}</main>`;
 
       const search = el.querySelector('#ed-search');
@@ -2379,6 +2414,9 @@ window.EDITOR = (function () {
         });
         ta.addEventListener('blur', () => { clearTimeout(timer); commit(ta.dataset.orig, ta.value); });
       });
+      el.querySelectorAll('details').forEach((d) => d.addEventListener('toggle', () => {
+        if (d.open) d.querySelectorAll('.ed-ta').forEach((ta) => { ta.style.height = 'auto'; ta.style.height = Math.max(56, ta.scrollHeight) + 'px'; });
+      }));
       el.querySelectorAll('[data-revert]').forEach((b) => {
         b.onclick = () => { const ta = b.parentElement.querySelector('.ed-ta'); commit(ta.dataset.orig, ''); render(); };
       });
