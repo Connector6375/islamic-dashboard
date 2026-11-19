@@ -1,0 +1,87 @@
+/* styles/tokens.css */
+/* Design tokens. Two themes: light "رمل وأقواس" (sand & arches, the default) and dark "زمرّد ومصحف" (emerald & gold),
+   switched with the moon/sun button in the top bar (saved in state.settings.theme). Palette from design-handoff/DESIGN.md.
+   Components use ROLE tokens (--surface, --ink, --accent, --ok-fg …), never a raw colour, so both themes stay in step. */
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #F4ECDD;               /* page */
+  --surface: #FFFBF3;          /* panels, cards, modals */
+  --surface-2: #F7EFE1;        /* cards inside panels, inner fills */
+  --surface-3: #EFE4CF;        /* chips, quiet buttons, inactive tabs */
+  --line: #DCCBAA;             /* control borders */
+  --line-soft: #E6D8BD;        /* dividers, card outlines */
+  --ink: #2A2117;              /* text */
+  --ink-soft: #4A3C2A;
+  --muted: #65553F;
+
+  --accent: #0E7470;           /* highlight: primary buttons, active tab, titles */
+  --on-accent: #FFFFFF;
+  --accent-2: #A44A22;         /* terracotta: secondary titles, term names */
+  --blue-ink: #2D5AA0;         /* blue used as text */
+
+  --note-bg: #FBEFD2;          /* hints, explanations */
+  --note-ink: #6E4A08;
+  --ok-bg: #E2F0DC;  --ok-fg: #2F6125;      /* right answer: fill + text/border (differ in lightness, not hue alone) */
+  --no-bg: #F8DCD6;  --no-fg: #B3261E;      /* wrong answer */
+
+  --overlay: rgba(42, 33, 23, .62);
+  --topbar: rgba(255, 251, 243, .95);
+  --shadow: rgba(90, 64, 30, .12);
+  --shadow-lg: rgba(90, 64, 30, .30);
+  --tally-bg: rgba(42, 33, 23, .12);
+  --score-dark: 45%;           /* how much a pastel group colour is darkened when it is TEXT on a light card */
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0C2A22;
+  --surface: #12372C;
+  --surface-2: #184536;
+  --surface-3: #1F4E3E;
+  --line: #2F6450;
+  --line-soft: #245A47;
+  --ink: #F4EEDC;
+  --ink-soft: #D8E2D4;
+  --muted: #BACBBF;
+
+  --accent: #D9B45A;
+  --on-accent: #1F1606;
+  --accent-2: #6FD3B3;
+  --blue-ink: #8FB8FF;
+
+  --note-bg: #2E3A1E;
+  --note-ink: #F1DC9C;
+  --ok-bg: #1E4A33;  --ok-fg: #A8E6BE;
+  --no-bg: #4A2420;  --no-fg: #FFB4A3;
+
+  --overlay: rgba(4, 18, 14, .82);
+  --topbar: rgba(10, 36, 29, .94);
+  --shadow: rgba(0, 0, 0, .35);
+  --shadow-lg: rgba(0, 0, 0, .5);
+  --tally-bg: rgba(0, 0, 0, .3);
+  --score-dark: 0%;
+  --frame: inset 0 0 0 2px #8C7638, inset 0 0 0 7px var(--surface), inset 0 0 0 8px #5A5230;   /* gold double line (Mushaf) */
+}
+
+:root {
+  /* pastel fills: group / unit / semantic colours. They always carry DARK text (≥ 7:1), in both themes. */
+  --amber: #F4B740;
+  --teal: #3CC6B0;
+  --blue: #7AA7FF;
+  --coral: #FF8A65;
+  --violet: #B69CFF;
+  --lime: #A8D672;
+  --on-amber: #1A1406;
+  --on-teal: #0B1A17;
+  --on-blue: #0D1526;
+  --on-coral: #2A0F06;
+  --on-color: #12151B;
+  --paper: #FFFFFF;            /* textbook scans keep their white paper */
+
+  --tap: 56px;              /* minimum touch target: students tap the projected screen */
+  --font: "Baloo Bhaijaan 2", "Segoe UI", Tahoma, Arial, sans-serif;               /* embedded (fonts.css), Windows fallback */
+  --font-head: "El Messiri", "Baloo Bhaijaan 2", "Segoe UI", Tahoma, sans-serif;   /* titles */
+  --fs-body: clamp(16px, 1.4vw, 22px);
+  --fs-big: clamp(26px, 3vw, 44px);
+}

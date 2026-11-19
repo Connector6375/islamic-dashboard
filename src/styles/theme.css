@@ -1,0 +1,54 @@
+/* styles/theme.css */
+/* Decorative layer of design-handoff/theme.css (sand & arches / emerald & Mushaf), ported to the current components.
+   The palettes themselves are the role tokens in tokens.css; this file adds type, arches, frames and the lattice.
+   Loaded AFTER main.css and fonts.css. Design only: no layout, content, game or scoring behaviour changes. */
+
+body { font-family: var(--font); color: var(--ink); background: var(--bg) fixed; }
+:root[data-theme="dark"] body {
+  /* faint eight-point star lattice */
+  background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Cg fill='none' stroke='%23123A2F' stroke-width='2'%3E%3Cpath d='M48 8l12 28 28 12-28 12-12 28-12-28-28-12 28-12z'/%3E%3Ccircle cx='48' cy='48' r='10'/%3E%3Cpath d='M0 0l20 20M96 0L76 20M0 96l20-20M96 96L76 76'/%3E%3C/g%3E%3C/svg%3E") fixed;
+}
+
+/* titles: El Messiri; everything else Baloo Bhaijaan 2 */
+:is(.brand, .page-title, .board-title, .lesson-head h1, .sec-title, .section-title, .panel-title, .unit-head, .g-name,
+    .modal h2, .result h2, .pick h2, .p-title, .tile b, .ltile b, .gtile b, .info h3, .set-sec h3, .cb-name, .ed-group summary) {
+  font-family: var(--font-head);
+}
+
+/* ---------- top bar ---------- */
+.topbar { border-bottom: 2px solid var(--line); }
+:root:not([data-theme="dark"]) .topbar {
+  /* a row of small arches under the bar */
+  border-bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='14'%3E%3Cpath d='M2 14V9a20 8 0 0 1 40 0v5' fill='none' stroke='%23C9A877' stroke-width='2'/%3E%3C/svg%3E") repeat-x left bottom / 44px 14px,
+    var(--topbar);
+  padding-bottom: 20px;
+}
+:root[data-theme="dark"] .topbar { border-bottom: 3px double #8C7638; }
+.brand { color: var(--ink); }
+
+/* ---------- cards ---------- */
+:root:not([data-theme="dark"]) :is(.panel, .gtile, .ltile, .tile, .info, .result, .step-card, .quiz-q, .story-card, .fig, .ed-group, .modal, .check) {
+  box-shadow: 0 0 0 2px var(--line-soft), 0 6px 18px var(--shadow);
+}
+:root:not([data-theme="dark"]) .gcard { box-shadow: 0 0 0 2px var(--line-soft); }
+:root[data-theme="dark"] :is(.gtile, .ltile, .tile, .info, .result, .step-card, .quiz-q, .story-card, .fig, .ed-group, .modal) {
+  box-shadow: var(--frame), 0 10px 28px var(--shadow);
+}
+:root[data-theme="dark"] .gcard {
+  /* sits on --surface-2: same gold double line, inner ring in that colour */
+  box-shadow: inset 0 0 0 2px #8C7638, inset 0 0 0 7px var(--surface-2), inset 0 0 0 8px #5A5230, 0 10px 28px var(--shadow);
+}
+
+/* light: score cards and class buttons are mihrab arches */
+:root:not([data-theme="dark"]) .gcard { border-radius: 50% 50% 28px 28px / 64px 64px 28px 28px; padding-top: 38px; }
+:root:not([data-theme="dark"]) .gcard-top { justify-content: center; }
+:root:not([data-theme="dark"]) .g-name { flex: 0 1 auto; }
+:root:not([data-theme="dark"]) .class-btn { border-radius: 50% 50% 22px 22px / 40px 40px 22px 22px; padding-top: 22px; align-items: center; text-align: center; }
+
+/* ---------- games ---------- */
+:root[data-theme="dark"] .mc .back { box-shadow: inset 0 0 0 3px #8C7638, 0 6px 16px var(--shadow); }
+.lightbox figcaption { color: #fff; }
+
+/* theme button (top bar) */
+#btn-theme svg { display: block; }

@@ -17,7 +17,7 @@
 **الاستخدام في الصف:** تُعرض على شاشة اللمس (Edge/Chrome) ويتقدم الطلبة لللمس — الدور turns بديل بين المجموعات،
 ولكل إجابة صحيحة نقطة واحدة للمجموعة صاحبة الدور. تُحفظ النقاط في المتصفح نفسه (ولسحبها لجهاز آخر أو نسخة احتياطية: ⚙️ ← تصدير).
 
-**الواجهة:** تصميم داكن بأزرار كبيرة للمس وخط «Baloo Bhaijaan 2» (مضمّن داخل الملف، يعمل دون إنترنت). لوحة النقاط في صفحة واحدة: الصفوف على الجانب ومجموعات الصف المختار بجانبها.
+**الواجهة:** وضعان يبدّلهما زر 🌙/☀️ في الشريط العلوي (يُحفظ الاختيار مع النسخة الاحتياطية): **نهاري «رمل وأقواس»** (الافتراضي) و**ليلي «زمرّد ومصحف»**، بأزرار كبيرة للمس وخطّي El Messiri (العناوين) وBaloo Bhaijaan 2 (مضمّنين داخل الملف، يعمل دون إنترنت). لوحة النقاط في صفحة واحدة: الصفوف على الجانب ومجموعات الصف المختار بجانبها.
 **الإعدادات** (⚙️): إضافة صفوف وحذفها وإعادة تسميتها، وتعديل مجموعات كل صف (٢–٦: الاسم، الشعار، اللون)، ونسخة احتياطية، وتصفير النقاط.
 
 **الفتح:** https://connector6375.github.io/islamic-dashboard/ — أو تنزيل `index.html` وفتحه بنقرة مزدوجة (يعمل دون إنترنت بالكامل).
@@ -37,7 +37,9 @@ for six grade-5 lessons (semester 1: unit 2 — Badr, Islamic brotherhood; unit 
 the Battle of Uhud, friendship). Built from the textbook pages (2026/27 edition) and the teacher's prep plans; one self-contained
 `index.html` with no CDNs or external images; the one web font (Baloo Bhaijaan 2, SIL OFL) is embedded.
 
-The look follows the "Classroom Dashboard" design: dark ground, amber/teal/blue accents, large touch targets.
+Two themes, switched with the moon/sun button in the top bar and saved in `state.settings.theme`: light "Sand & arches"
+(default) and dark "Emerald & Mushaf" (design handoff on branch `theme-sand-emerald`), on top of the "Classroom Dashboard" layout
+(large touch targets). The stylesheets are exported in `src/styles/`.
 The scoreboard is one split page (classes beside the selected class's groups), and classes and their groups
 (2–6 each: name, logo, colour) are edited on the ⚙️ settings page. Saves from before the redesign are upgraded
 automatically (points kept, group colours mapped to the new palette).
@@ -58,7 +60,7 @@ Drive for desktop syncs and the files reach Drive too, without Drive's 10 MB upl
   move focus to the heading, scores are announced through a live region, skip link, phone-width tabs keep their names.
 - **Performance:** figures are WebP (−32 %) in a JSON block placed *after* the app, so the page is drawn and usable before they
   arrive; figures are `loading="lazy"`.
-- **Platform:** CSP (`default-src 'none'`, same-origin network only), `color-scheme`/`theme-color`, safe-area insets, `dvh`,
+- **Platform:** CSP (`default-src 'none'`, same-origin network only), `color-scheme`/`theme-color` (follow the theme, applied before first paint), safe-area insets, `dvh`,
   `text-wrap`, forced-colors support, inline favicon.
 - **Installable + offline** when served over https (GitHub Pages): `manifest.webmanifest`, `sw.js` (stale-while-revalidate),
   `icons/`. The service worker is registered only over http(s); opening `index.html` from disk is unchanged.
