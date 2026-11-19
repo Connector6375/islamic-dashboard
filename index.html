@@ -560,6 +560,13 @@ p, .muted, .why, .step-tip, .tile .goal, .vocab div { text-wrap: pretty; }
   .gcard, .panel, .tile, .ltile, .info, .fig, .quiz-q, .choice, .class-btn, .tab, .icon-btn, .swatch { border: 2px solid CanvasText; }
   .class-btn[aria-pressed="true"], .tab.active, .chip-btn[aria-pressed="true"] { outline: 3px solid Highlight; }
 }
+
+/* ---------- story game ---------- */
+.story-card { background: var(--surface); border-radius: 28px; padding: clamp(20px, 3vw, 36px); text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; border: 4px solid transparent; }
+.story-em { font-size: clamp(56px, 8vw, 96px); line-height: 1; }
+.story-text { font-size: clamp(24px, 3.2vw, 44px); font-weight: 800; line-height: 1.6; text-wrap: pretty; }
+.story-card.story-end.good { border-color: var(--teal); }
+.story-card.story-end.bad { border-color: var(--coral); }
 </style>
 </head>
 <body>
@@ -903,6 +910,58 @@ window.CURRICULUM['grade-5'] = {
                   why: 'أرسلت الكويت مساعدات للدول المنكوبة وأنشأت مستشفيات ميدانية — نموذج للنصرة والإخوة.',
                 },
               ],
+            },
+            {
+              type: 'story',
+              title: 'يوسف الزميل الجديد',
+              start: 's1',
+              scenes: {
+                s1: {
+                  text: 'دخل يوسف مدرستك لأول مرة، وجلس وحده في الفصل.', emoji: '🏫',
+                  choices: [
+                    { text: 'تدعوه ليجلس معك', to: 's2', good: true, note: 'الأخوّة الإسلامية: لا نترك أخانا وحيدًا.' },
+                    { text: 'تتجاهله لأنك مشغول', to: 's1b', good: false, note: 'قد يشعر الزميل الجديد بالوحدة.' },
+                  ],
+                },
+                s1b: {
+                  text: 'ما زال يوسف جالسًا وحده في الفرصة، وهو حزين.', emoji: '😔',
+                  choices: [
+                    { text: 'تذهب إليه وتدعوه ليلعب معكم', to: 's2', good: true },
+                    { text: 'تكمل لعبك دون أن تلتفت إليه', to: 'bad', good: false },
+                  ],
+                },
+                s2: {
+                  text: 'عطس يوسف أثناء الحصة وقال: «الحمد لله».', emoji: '🤧',
+                  choices: [
+                    { text: 'تقول له: «يرحمك الله»', to: 's3', good: true, note: 'تشميت العاطس حقٌّ من حقوق المسلم على المسلم.' },
+                    { text: 'لا تردّ عليه', to: 's3', good: false, note: 'إذا حمد العاطسُ اللهَ فمن حقه أن نقول له: يرحمك الله.' },
+                  ],
+                },
+                s3: {
+                  text: 'مرض يوسف وغاب عن المدرسة عدة أيام.', emoji: '🤒',
+                  choices: [
+                    { text: 'تزوره مع والدك وتدعو له', to: 's4', good: true, note: 'عيادة المريض حقٌّ من حقوق المسلم على المسلم.' },
+                    { text: 'تنتظر حتى يعود إلى المدرسة', to: 's4', good: false, note: 'من حقه علينا أن نزوره ونتفقّده.' },
+                  ],
+                },
+                s4: {
+                  text: 'سمعتَ زملاء يسخرون من يوسف ويقلّدون لهجته.', emoji: '😠',
+                  choices: [
+                    { text: 'تقف معه وتطلب منهم التوقف بأدب', to: 'good', good: true, note: 'النصرة: مساعدة أخيك عندما يحتاج إليك.' },
+                    { text: 'تضحك معهم حتى لا يسخروا منك', to: 's4b', good: false },
+                    { text: 'تتفرج وتسكت', to: 's4b', good: false },
+                  ],
+                },
+                s4b: {
+                  text: 'حزن يوسف كثيرًا. وتذكّرتَ: «المسلم أخو المسلم لا يظلمه ولا يخذله».', emoji: '💭',
+                  choices: [
+                    { text: 'تعتذر ليوسف وتقف معه الآن', to: 'good', good: true },
+                    { text: 'تتجاهل الأمر', to: 'bad', good: false },
+                  ],
+                },
+                good: { text: 'أحسنت! صرتَ أخًا حقيقيًا ليوسف. ومن كان في حاجة أخيه كان الله في حاجته.', emoji: '🤝', end: 'good' },
+                bad: { text: 'خسرتَ أخًا بسبب تقصيرك. الأخوّة أن نساعد إخواننا وننصرهم.', emoji: '💔', end: 'bad' },
+              },
             },
           ],
           handsOn: {
@@ -1458,6 +1517,58 @@ window.CURRICULUM['grade-5'] = {
                 { target: 'madina', prompt: 'المس المدينة المنورة:' },
               ],
             },
+            {
+              type: 'story',
+              title: 'قرارات يوم أحد',
+              start: 's1',
+              scenes: {
+                s1: {
+                  text: 'استشار النبي ﷺ أصحابه: أين نقاتل؟ وطُلب منك أن تُبدي رأيك.', emoji: '🗣️',
+                  choices: [
+                    { text: 'تقول رأيك بأدب، وتقبل ما يستقر عليه الرأي', to: 's2', good: true, note: 'الشورى: المشاركة في الرأي قبل اتخاذ القرار، وهو نهج النبي ﷺ.' },
+                    { text: 'تصرّ على رأيك وتغضب إن لم يؤخذ به', to: 's1b', good: false, note: 'الشورى تعني أن نسمع، ونحترم القرار الذي يتفق عليه المسلمون.' },
+                  ],
+                },
+                s1b: {
+                  text: 'استقر الرأي على القتال عند جبل أحد لحماية الجيش ومنع هجوم العدو من الخلف.', emoji: '⛰️',
+                  choices: [
+                    { text: 'تقبل القرار وتخرج مع الجيش', to: 's2', good: true },
+                    { text: 'ترفض الخروج مع الجيش', to: 'bad', good: false },
+                  ],
+                },
+                s2: {
+                  text: 'وقبل الوصول إلى أرض المعركة انسحب ثلث الجيش بقيادة المنافق عبد الله بن أُبيّ بن سلول!', emoji: '😟',
+                  choices: [
+                    { text: 'تبقى مع النبي ﷺ والمؤمنين', to: 's3', good: true, note: 'المنافق: من يُظهر الإيمان ويُبطن الكفر.' },
+                    { text: 'تنسحب معهم', to: 'bad', good: false },
+                  ],
+                },
+                s3: {
+                  text: 'وضع النبي ﷺ خمسين راميًا على جبل عينين وأوصاهم: «لا تتركوا أماكنكم حتى لو رأيتمونا ننتصر أو نُهزم». وبدأ المسلمون ينتصرون! وأنت واحد من الرماة.', emoji: '🏹',
+                  choices: [
+                    { text: 'تثبت في مكانك طاعةً لأمر النبي ﷺ', to: 's4', good: true, note: 'طاعة ولاة الأمر واجبة شرعًا في غير معصية الله تعالى.' },
+                    { text: 'تنزل مع زملائك لجمع الغنائم', to: 's3b', good: false, note: 'خالف بعض الرماة أمر النبي ﷺ ونزلوا من الجبل.' },
+                  ],
+                },
+                s4: {
+                  text: 'نزل بعض زملائك، وهجم الكفار من الخلف على الجيش! الخطر قريب منك.', emoji: '⚠️',
+                  choices: [
+                    { text: 'تثبت وتتوكل على الله', to: 'good', good: true, note: 'حسن التوكل على الله تعالى والثبات.' },
+                    { text: 'تتراجع عن موقعك', to: 'bad', good: false },
+                  ],
+                },
+                s3b: {
+                  text: 'وأنت تجمع الغنائم هجم الكفار من الخلف، فتغيّرت مجريات المعركة! ثم سمعتَ خبرًا: «قُتل رسول الله ﷺ!»', emoji: '😱',
+                  choices: [
+                    { text: 'تنشر الخبر بين المسلمين', to: 'bad', good: false, note: 'الإشاعة خبر غير مؤكد وغالبًا غير صحيح، ونشرها يزعزع الجيش.' },
+                    { text: 'تثبت وتقاتل، ولا تنقل خبرًا لم تتأكد منه', to: 'good2', good: true, note: 'لا ننقل الإشاعة؛ نثبت ونتوكل على الله.' },
+                  ],
+                },
+                good: { text: 'شاركتَ بالرأي، وثبتَّ على أمر النبي ﷺ. تعلّمنا: الشورى، وطاعة ولاة الأمر في غير معصية، وحسن التوكل على الله والثبات.', emoji: '🏅', end: 'good' },
+                good2: { text: 'أخطأ بعض الرماة حين خالفوا الأمر، لكنك ثبتَّ ولم تنشر الإشاعة. الهزيمة ابتلاءٌ من الله وتربيةٌ للمسلمين.', emoji: '🌱', end: 'good' },
+                bad: { text: 'الاختلاف وعدم الثبات يُضعفان الصف. الهزيمة ابتلاءٌ من الله وتربيةٌ للمسلمين لنتعلّم الطاعة والثبات.', emoji: '💔', end: 'bad' },
+              },
+            },
           ],
           handsOn: {
             goal: 'أنجز أنشطة الدرس في الكتاب المدرسي: المقارنة بين بدر وأحد، دلالة الأرقام، البحث، ثم التقويم (ص168–175)',
@@ -1616,6 +1727,51 @@ window.CURRICULUM['grade-5'] = {
                 { a: 'الجليس الصالح', b: 'كحامل المسك: تنال منه خيرًا أو رائحة طيبة' },
                 { a: 'الجليس السوء', b: 'كنافخ الكير: قد يضرّك بالشرر والنار' },
               ],
+            },
+            {
+              type: 'story',
+              title: 'اختر صديقك',
+              start: 's1',
+              scenes: {
+                s1: {
+                  text: 'طلب منك زميلك أن تكذب على المعلّم ليخفي خطأه، وقال: «هكذا يفعل الأصدقاء!»', emoji: '🤥',
+                  choices: [
+                    { text: 'تكذب حتى لا تخسر صداقته', to: 's1b', good: false, note: 'من صفات الصديق الصالح: الصدق والأمانة.' },
+                    { text: 'تنصحه برفق أن يصدق ويعتذر', to: 's2', good: true, note: 'النصيحة: يُرشدك الصديق إلى الطريق الصحيح.' },
+                  ],
+                },
+                s1b: {
+                  text: 'اكتشف المعلّم الكذب، وشعرتَ بالندم.', emoji: '😞',
+                  choices: [
+                    { text: 'تعترف بالحقيقة وتعتذر', to: 's2', good: true },
+                    { text: 'تستمر في الكذب', to: 'bad', good: false },
+                  ],
+                },
+                s2: {
+                  text: 'ذكّرك صديقك سالم بوقت الصلاة، ودعاك لتحفظ معه سورة الملك.', emoji: '📖',
+                  choices: [
+                    { text: 'تشكره وتحفظ معه', to: 's3', good: true, note: 'الإيمان والتقوى: صديق يُعينك على الطاعة ويبعدك عن الحرام.' },
+                    { text: 'تقول له: لا تزعجني', to: 's3', good: false, note: 'الصديق الصالح كحامل المسك: تنال منه خيرًا.' },
+                  ],
+                },
+                s3: {
+                  text: 'اجتمع أصدقاؤك وبدأوا يتحدثون عن زميل غائب بكلام سيئ.', emoji: '🗣️',
+                  choices: [
+                    { text: 'تنهاهم بأدب وتغيّر الحديث', to: 'good', good: true, note: 'حسن الخلق: الابتعاد عن الغيبة والنميمة.' },
+                    { text: 'تشاركهم الكلام', to: 'bad', good: false },
+                    { text: 'تسكت وتبقى معهم', to: 's3b', good: false },
+                  ],
+                },
+                s3b: {
+                  text: 'شعرتَ بالضيق وأنت تسمع الكلام السيئ. وتذكّرتَ: «الرجل على دين خليله فلينظر أحدكم من يُخالِل».', emoji: '💭',
+                  choices: [
+                    { text: 'تنهاهم وتغيّر الحديث الآن', to: 'good', good: true },
+                    { text: 'تبقى صامتًا', to: 'bad', good: false },
+                  ],
+                },
+                good: { text: 'اخترتَ صحبة الصالحين! الصديق الصالح يدلّك على الخير، ويُظلّ الله المتحابّين في ظلّه يوم القيامة.', emoji: '🌳', end: 'good' },
+                bad: { text: 'الصداقة التي لا تقوم على التقوى قد تنقلب عداوةً يوم القيامة. اختر أصدقاءك بعناية.', emoji: '💔', end: 'bad' },
+              },
             },
           ],
           handsOn: {
@@ -2192,6 +2348,7 @@ window.FX = (function () {
 
   api.confetti = function () {
     const cv = document.createElement('canvas');
+    cv.setAttribute('aria-hidden', 'true');   // decoration only
     cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:90';
     cv.width = innerWidth;
     cv.height = innerHeight;
@@ -2522,6 +2679,70 @@ window.GAMES.register('hotspot', {
     });
 
     ask();
+  },
+});
+</script>
+  <script>/* js/games/story.js */
+// story: one scene at a time; each decision is one group's turn and leads to a consequence scene.
+// Data: { start: sceneId, scenes: { id: Scene } }
+//   Scene = { text, emoji?, choices: [{ text, to: sceneId, good: boolean, note? }] }   a decision
+//         | { text, emoji?, end: 'good' | 'bad' }                                        an ending
+//   good: true -> a point; good: false -> no point, and the story goes on to the consequence scene.
+// Authoring: 4-6 decisions on the longest path, 2-3 choices each, no loops, every path ends,
+// and a wrong choice leads to a scene where the character can still put it right.
+window.GAMES.register('story', {
+  icon: '🧭',
+  label: 'اختر طريقك',
+  render(root, act, done, ctx) {
+    const { esc, shuffle } = window.UI;
+    const scenes = act.scenes;
+    const VERDICT = { ok: '✅ قرار موفّق!', no: '❌ قرار غير موفّق' };
+    let score = 0;
+    let max = 0;   // decisions met on the path taken
+
+    if (!scenes[act.start]) console.warn('story: missing start scene', act.start);
+    Object.entries(scenes).forEach(([id, s]) => (s.choices || []).forEach((c) => {
+      if (!scenes[c.to]) console.warn(`story: scene "${id}" points to missing scene "${c.to}"`);
+      if (typeof c.good !== 'boolean') console.warn(`story: a choice in scene "${id}" needs good: true or false`);
+    }));
+
+    function show(id) {
+      const s = scenes[id];
+      if (!s) return done({ score, max });
+      if (s.end) return ending(s);
+      max++;
+      root.innerHTML = `<div class="quiz">
+        <div class="g-progress">⭐ ${score}</div>
+        <div class="story-card">
+          ${s.emoji ? `<div class="story-em" aria-hidden="true">${esc(s.emoji)}</div>` : ''}
+          <div class="story-text">${esc(s.text)}</div>
+        </div>
+        <div class="quiz-choices">${shuffle(s.choices).map((c) => `<button class="choice" data-to="${esc(c.to)}">${esc(c.text)}</button>`).join('')}</div>
+        <div class="quiz-foot"></div>
+      </div>`;
+      root.querySelectorAll('.choice').forEach((b) => {
+        b.onclick = () => {
+          const c = s.choices.find((x) => x.to === b.dataset.to && x.text === b.textContent);
+          root.querySelectorAll('.choice').forEach((x) => { x.disabled = true; });
+          root.querySelector('.quiz-choices').classList.add('answered');
+          if (c.good) { b.classList.add('ok'); score++; ctx.hit(); window.FX.sound('ok'); } else { b.classList.add('no'); window.FX.sound('no'); }
+          ctx.answered(!!c.good, () => show(c.to), c.note, VERDICT);
+        };
+      });
+    }
+
+    function ending(s) {
+      root.innerHTML = `<div class="quiz">
+        <div class="story-card story-end ${s.end === 'good' ? 'good' : 'bad'}">
+          ${s.emoji ? `<div class="story-em" aria-hidden="true">${esc(s.emoji)}</div>` : ''}
+          <div class="story-text">${esc(s.text)}</div>
+        </div>
+        <div class="row center"><button class="btn big yellow" data-finish data-autofocus>النتيجة ◀</button></div>
+      </div>`;
+      root.querySelector('[data-finish]').onclick = () => done({ score, max });
+    }
+
+    show(act.start);
   },
 });
 </script>
@@ -2922,9 +3143,9 @@ window.ACTIVITIES = (function () {
         renderTurns();
         window.UI.pop(el.querySelector('.turn.on'), '+1');
       },
-      answered(ok, next, note) {
+      answered(ok, next, note, verdict) {   // verdict?: { ok, no } replaces the "right / wrong answer" wording
         el.classList.add('paused');
-        popTimer = setTimeout(() => showPop({ ok, note }, next), 700);
+        popTimer = setTimeout(() => showPop({ ok, note, verdict }, next), 700);
       },
     };
 
@@ -2941,7 +3162,7 @@ window.ACTIVITIES = (function () {
           <span class="em">${esc(g.emoji)}</span>${esc(g.name)}</button>`).join('');
       box.innerHTML = `<div class="p-pop-card" role="status">
         <div class="pop-top">
-          <div class="pop-verdict ${info.pause ? '' : info.ok ? 'ok' : 'no'}">${info.pause ? '⏸ متوقف مؤقتًا' : info.ok ? '✅ إجابة صحيحة!' : '❌ إجابة خاطئة'}</div>
+          <div class="pop-verdict ${info.pause ? '' : info.ok ? 'ok' : 'no'}">${info.pause ? '⏸ متوقف مؤقتًا' : info.ok ? ((info.verdict && info.verdict.ok) || '✅ إجابة صحيحة!') : ((info.verdict && info.verdict.no) || '❌ إجابة خاطئة')}</div>
           ${credited ? `<div class="pop-credit" style="--gc:${credited.color}"><span class="ltr">+1</span> ${esc(credited.emoji)} ${esc(credited.name)}</div>` : ''}
         </div>
         ${info.note ? `<p class="why">💡 ${esc(info.note)}</p>` : ''}
