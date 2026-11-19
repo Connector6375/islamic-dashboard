@@ -133,7 +133,6 @@ svg { flex: none; }
 }
 .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 1.4em; line-height: 1.2; white-space: nowrap; }
 .brand svg { color: var(--accent); }
-.tabs { display: flex; gap: 10px; flex: 1; justify-content: center; }
 .tab {
   min-height: var(--tap); padding: 0 24px; border-radius: 16px; background: var(--surface-3); color: var(--ink);
   font-weight: 700; font-size: 1.05em; display: inline-flex; align-items: center; gap: 10px;
@@ -141,7 +140,7 @@ svg { flex: none; }
 .tab svg { color: var(--muted); }
 .tab.active { background: var(--accent); color: var(--on-accent); }
 .tab.active svg { color: var(--on-accent); }
-.tools { display: flex; gap: 8px; }
+.tools { display: flex; gap: 8px; margin-inline-start: auto; }
 .icon-btn { width: var(--tap); height: var(--tap); border-radius: 16px; background: var(--surface-3); color: var(--ink); display: flex; align-items: center; justify-content: center; }
 .icon-btn[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
 
@@ -182,47 +181,79 @@ svg { flex: none; }
 .panel-title { font-size: clamp(24px, 2vw, 32px); font-weight: 700; color: var(--accent); }
 .panel-title.teal { color: var(--accent-2); }
 
-/* ---------- scoreboard: classes (side) + groups (main) ---------- */
-.board { display: grid; grid-template-columns: minmax(300px, 1fr) minmax(0, 2.8fr); gap: 22px; align-items: start; }
+/* ---------- one screen: classes rail (right in RTL) + the large pane ---------- */
+.shell {
+  display: grid; grid-template-columns: clamp(270px, 26vw, 380px) minmax(0, 1fr); gap: 22px; align-items: start;
+  max-width: 1800px; margin: 0 auto; padding: 22px clamp(14px, 2.2vw, 40px) 56px;
+}
+.shell #view { padding: 0; margin: 0; max-width: none; }
+.pane { min-width: 0; }
+.pane-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+
+.rail { position: sticky; top: 92px; max-height: calc(100vh - 112px); max-height: calc(100dvh - 112px); overflow-y: auto; gap: 14px; padding: 18px; }
+.rail .panel-title { font-size: clamp(22px, 1.6vw, 28px); }
 .class-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-content: start; }
 .class-btn {
-  min-height: 112px; padding: 12px 18px; border-radius: 22px; border: 3px solid transparent;
+  min-height: 112px; padding: 12px 10px; border-radius: 22px; border: 3px solid transparent;
   background: var(--surface-2); color: var(--ink);
-  display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 2px; text-align: start;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-align: center;
 }
-.class-btn[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
-.cb-name { font-size: clamp(30px, 2.6vw, 44px); font-weight: 800; line-height: 1.1; }
-.cb-emojis { font-size: 22px; letter-spacing: 2px; line-height: 1.3; }
-.cb-total { font-size: 18px; font-weight: 600; opacity: .8; }
+.class-btn.on { border-color: var(--accent); }
+.cb-name { font-size: clamp(26px, 2vw, 36px); font-weight: 800; line-height: 1.1; overflow-wrap: anywhere; }
+.cb-emojis { font-size: 18px; letter-spacing: 1px; line-height: 1.3; }
+.cb-total { font-size: 16px; font-weight: 600; opacity: .8; }
 
-.board-main { min-height: 560px; }
-.board-empty { flex: 1; min-height: 520px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; color: var(--muted); text-align: center; }
-.board-empty svg { color: var(--accent); }
-.board-empty p { font-size: clamp(28px, 2.6vw, 44px); font-weight: 700; color: var(--ink); }
-.board-body { display: flex; flex-direction: column; gap: 18px; animation: fadeIn .25s ease-out; }
-.board-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
-.board-title { font-size: clamp(36px, 3.6vw, 60px); font-weight: 800; line-height: 1; }
-
-.group-grid { display: grid; grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr)); gap: 18px; }
-.gcard {
-  min-width: 0; background: var(--surface-2); border-radius: 28px; padding: 20px 24px; border: 4px solid transparent;
+.rail-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: space-between; }
+.rail-back { min-height: 52px; padding: 0 16px; gap: 8px; }
+.rail-class { font-size: clamp(30px, 2.4vw, 44px); font-weight: 800; line-height: 1; }
+.rail-groups { display: flex; flex-direction: column; gap: 12px; animation: fadeIn .25s ease-out; }
+.rg {
+  min-width: 0; background: var(--surface-2); border-radius: 24px; padding: 14px; border: 3px solid transparent;
   display: flex; flex-direction: column; gap: 10px;
 }
-.gcard.leader { border-color: var(--gc); }
-.gcard-top { display: flex; align-items: center; gap: 16px; }
-.g-emoji { flex: none; width: 76px; height: 76px; border-radius: 22px; background: var(--gc); display: flex; align-items: center; justify-content: center; font-size: 46px; line-height: 1; }
-.g-name { flex: 1; min-width: 0; font-size: clamp(26px, 2.4vw, 40px); font-weight: 800; line-height: 1.15; }
-.g-crown { color: color-mix(in srgb, var(--gc), #000 var(--score-dark)); }
-.score-wrap { position: relative; flex: 1; min-height: 120px; display: flex; align-items: center; justify-content: center; }
-.g-points { display: inline-block; font-size: clamp(88px, 6.8vw, 130px); font-weight: 800; line-height: 1; color: color-mix(in srgb, var(--gc), #000 var(--score-dark)); }
+.rg.leader { border-color: var(--gc); }
+.rg-top { display: flex; align-items: center; gap: 12px; }
+.rg .g-emoji { width: 56px; height: 56px; border-radius: 18px; font-size: 32px; }
+.rg .g-name { font-size: clamp(20px, 1.5vw, 26px); overflow-wrap: anywhere; }
+.rg .g-crown { width: 26px; height: 26px; vertical-align: -4px; margin-inline-end: 4px; }
+.rg .score-wrap { flex: none; min-height: 0; min-width: 2.2ch; }
+.rg .g-points { font-size: clamp(44px, 3.4vw, 64px); }
+.rg .g-chip { top: -14px; inset-inline-end: 0; font-size: 36px; }
+.rg .g-btns { gap: 10px; }
+.rg .pbtn { height: 60px; border-radius: 18px; font-size: 26px; }
+.rg .pbtn.minus { width: 68px; }
+
+.g-points { display: inline-block; font-weight: 800; line-height: 1; color: color-mix(in srgb, var(--gc), #000 var(--score-dark)); }
 .g-points.up { animation: bump .45s ease-out; }
 .g-points.down { animation: shake .35s ease-in-out; }
-.g-chip { position: absolute; top: 0; inset-inline-end: 14%; font-size: 56px; font-weight: 800; color: var(--ink); pointer-events: none; animation: rise .9s ease-out forwards; direction: ltr; unicode-bidi: isolate; }
+.score-wrap { position: relative; display: flex; align-items: center; justify-content: center; }
+.g-name { flex: 1; min-width: 0; font-weight: 800; line-height: 1.15; }
+.g-emoji { flex: none; display: flex; align-items: center; justify-content: center; background: var(--gc); line-height: 1; }
+.g-crown { color: color-mix(in srgb, var(--gc), #000 var(--score-dark)); }
+.g-chip { position: absolute; font-weight: 800; color: var(--ink); pointer-events: none; animation: rise .9s ease-out forwards; direction: ltr; unicode-bidi: isolate; }
 .g-chip.neg { color: var(--no-fg); }
 .g-btns { display: flex; gap: 12px; }
-.pbtn { height: 76px; border-radius: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 30px; font-weight: 800; }
-.pbtn.minus { flex: none; width: 84px; border: 2px solid var(--line); background: transparent; color: var(--ink); }
+.pbtn { display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 800; }
+.pbtn.minus { flex: none; border: 2px solid var(--line); background: transparent; color: var(--ink); }
 .pbtn.plus { flex: 1; background: var(--gc); color: var(--on-color); }
+
+/* leaderboard (pane): read-only ranking of groups or classes */
+.lb-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+.lb-filters .ctab { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
+.lb { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.lb-row {
+  position: relative; display: flex; align-items: center; gap: 16px; min-height: 84px; padding: 10px 18px; overflow: hidden;
+  background: var(--surface); border-radius: 22px; border: 3px solid transparent;
+}
+.lb-row.first { border-color: var(--gc); }
+.lb-rank { flex: none; width: 52px; height: 52px; border-radius: 16px; background: var(--surface-3); display: grid; place-items: center; font-weight: 800; font-size: 1.4em; }
+.lb-emoji { flex: none; width: 56px; height: 56px; border-radius: 18px; background: var(--gc); display: grid; place-items: center; font-size: 32px; line-height: 1; }
+.lb-name { flex: 1; min-width: 0; font-weight: 800; font-size: clamp(22px, 1.9vw, 30px); }
+.lb-name svg { width: 28px; height: 28px; vertical-align: -5px; margin-inline-end: 6px; color: color-mix(in srgb, var(--gc), #000 var(--score-dark)); }
+.lb-meta { color: var(--muted); white-space: nowrap; }
+.lb-rank, .lb-pts, .cb-total, .g-points { unicode-bidi: plaintext; }
+.lb-pts { font-weight: 800; font-size: clamp(34px, 3vw, 48px); min-width: 3ch; text-align: end; color: color-mix(in srgb, var(--gc), #000 var(--score-dark)); }
+.lb-bar { position: absolute; inset-block-end: 0; inset-inline-start: 0; height: 6px; width: var(--w); background: var(--gc); }
 
 .pop {
   position: fixed; z-index: 60; pointer-events: none; direction: ltr;
@@ -538,17 +569,20 @@ fieldset.field legend { padding: 0; margin-bottom: 4px; }
 .answer-img { max-width: 100%; max-height: 34vh; border-radius: 14px; border: 3px solid var(--line); background: var(--paper); }
 
 @media (max-width: 900px) {
-  .board, .set-grid, .set-grid.two { grid-template-columns: minmax(0, 1fr); }
-  .group-grid { grid-template-columns: minmax(0, 1fr); }
+  .set-grid, .set-grid.two { grid-template-columns: minmax(0, 1fr); }
+  .shell { grid-template-columns: minmax(0, 1fr); }
+  .rail { position: static; max-height: none; order: 2; }
+  .rail-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 760px) {
   .order-cols { grid-template-columns: 1fr; }
   .topbar { gap: 8px; padding: 8px 10px; }
   .brand { display: none; }
-  .tabs { justify-content: flex-start; gap: 6px; }
-  .tab { min-height: 48px; padding: 0 10px; }
-  .tab span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  .tools { gap: 6px; margin-inline-start: auto; }
+  .tab { min-height: 48px; padding: 0 14px; }
+  .tools { gap: 6px; }
+  .shell { padding-inline: 12px; }
+  .rail-groups { grid-template-columns: minmax(0, 1fr); }
+  .lb-meta { display: none; }
   .icon-btn { width: 44px; height: 44px; }
   .class-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .class-row { flex-wrap: wrap; }
@@ -574,7 +608,7 @@ fieldset.field legend { padding: 0; margin-bottom: 4px; }
 .ed-row [data-revert] { flex: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  .g-points.up, .g-points.down, .g-chip, .board-body, .choice.no, .chip.shake, .hs.wrong, .slot.hint { animation: none; }
+  .g-points.up, .g-points.down, .g-chip, .rail-groups, .choice.no, .chip.shake, .hs.wrong, .slot.hint { animation: none; }
   button, .turn { transition: none; }
   .mc .in { transition: none; }
 }
@@ -585,7 +619,7 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .vh, .tab span.vh { position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
 .skip { position: absolute; inset-inline-start: 12px; top: -80px; z-index: 100; padding: 12px 20px; border-radius: 12px; background: var(--accent); color: var(--on-accent); font-weight: 800; text-decoration: none; }
 .skip:focus { top: 12px; }
-h1, h2, .page-title, .board-title { text-wrap: balance; }
+h1, h2, .page-title { text-wrap: balance; }
 p, .muted, .why, .step-tip, .tile .goal, .vocab div { text-wrap: pretty; }
 /* notches / rounded corners on phones and tablets */
 .topbar { padding-inline: max(clamp(14px, 2vw, 32px), env(safe-area-inset-left), env(safe-area-inset-right)); padding-top: max(10px, env(safe-area-inset-top)); }
@@ -595,8 +629,8 @@ p, .muted, .why, .step-tip, .tile .goal, .vocab div { text-wrap: pretty; }
 .layer { overscroll-behavior: contain; }
 .player, .editor-layer { height: 100dvh; }
 @media (forced-colors: active) {
-  .gcard, .panel, .tile, .ltile, .info, .fig, .quiz-q, .choice, .class-btn, .tab, .icon-btn, .swatch { border: 2px solid CanvasText; }
-  .class-btn[aria-pressed="true"], .tab.active, .chip-btn[aria-pressed="true"] { outline: 3px solid Highlight; }
+  .rg, .lb-row, .panel, .tile, .ltile, .info, .fig, .quiz-q, .choice, .class-btn, .tab, .icon-btn, .swatch { border: 2px solid CanvasText; }
+  .class-btn.on, .tab.active, .chip-btn[aria-pressed="true"] { outline: 3px solid Highlight; }
 }
 
 /* ---------- story game ---------- */
@@ -627,7 +661,7 @@ body { font-family: var(--font); color: var(--ink); background: var(--bg) fixed;
 }
 
 /* titles: El Messiri; everything else Baloo Bhaijaan 2 */
-:is(.brand, .page-title, .board-title, .lesson-head h1, .sec-title, .section-title, .panel-title, .unit-head, .g-name,
+:is(.brand, .page-title, .rail-class, .lesson-head h1, .sec-title, .section-title, .panel-title, .unit-head, .g-name,
     .modal h2, .result h2, .pick h2, .p-title, .tile b, .ltile b, .gtile b, .info h3, .set-sec h3, .cb-name, .ed-group summary) {
   font-family: var(--font-head);
 }
@@ -648,19 +682,16 @@ body { font-family: var(--font); color: var(--ink); background: var(--bg) fixed;
 :root:not([data-theme="dark"]) :is(.panel, .gtile, .ltile, .tile, .info, .result, .step-card, .quiz-q, .story-card, .fig, .ed-group, .modal, .check) {
   box-shadow: 0 0 0 2px var(--line-soft), 0 6px 18px var(--shadow);
 }
-:root:not([data-theme="dark"]) .gcard { box-shadow: 0 0 0 2px var(--line-soft); }
-:root[data-theme="dark"] :is(.gtile, .ltile, .tile, .info, .result, .step-card, .quiz-q, .story-card, .fig, .ed-group, .modal) {
+:root:not([data-theme="dark"]) :is(.rg, .lb-row) { box-shadow: 0 0 0 2px var(--line-soft); }
+:root[data-theme="dark"] :is(.gtile, .ltile, .tile, .info, .result, .step-card, .quiz-q, .story-card, .fig, .ed-group, .modal, .lb-row) {
   box-shadow: var(--frame), 0 10px 28px var(--shadow);
 }
-:root[data-theme="dark"] .gcard {
+:root[data-theme="dark"] .rg {
   /* sits on --surface-2: same gold double line, inner ring in that colour */
   box-shadow: inset 0 0 0 2px #8C7638, inset 0 0 0 7px var(--surface-2), inset 0 0 0 8px #5A5230, 0 10px 28px var(--shadow);
 }
 
-/* light: score cards and class buttons are mihrab arches */
-:root:not([data-theme="dark"]) .gcard { border-radius: 50% 50% 28px 28px / 64px 64px 28px 28px; padding-top: 38px; }
-:root:not([data-theme="dark"]) .gcard-top { justify-content: center; }
-:root:not([data-theme="dark"]) .g-name { flex: 0 1 auto; }
+/* light: class buttons are mihrab arches */
 :root:not([data-theme="dark"]) .class-btn { border-radius: 50% 50% 22px 22px / 40px 40px 22px 22px; padding-top: 22px; align-items: center; text-align: center; }
 
 /* ---------- games ---------- */
@@ -679,10 +710,6 @@ body { font-family: var(--font); color: var(--ink); background: var(--bg) fixed;
       <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-9a8 8 0 0 1 16 0v9M2 21h20M12 1.5V4M9 21v-5a3 3 0 0 1 6 0v5"></path></svg>
       <span id="app-title">التربية الإسلامية</span>
     </div>
-    <nav class="tabs" aria-label="التنقل">
-      <button class="tab" data-route="scoreboard"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"></path></svg><span>لوحة النقاط</span></button>
-      <button class="tab" data-route="activities"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="11" rx="5"></rect><path d="M7 10.5v4M5 12.5h4"></path><circle cx="16" cy="11.5" r="1" fill="currentColor"></circle><circle cx="18" cy="14" r="1" fill="currentColor"></circle></svg><span>الأنشطة</span></button>
-    </nav>
     <div class="tools">
       <button class="icon-btn" id="btn-theme" title="الوضع الليلي" aria-label="الوضع الليلي"></button>
       <button class="icon-btn" id="btn-mute" title="الصوت" aria-label="الصوت"></button>
@@ -692,7 +719,17 @@ body { font-family: var(--font); color: var(--ink); background: var(--bg) fixed;
     </div>
   </header>
 
-  <main id="view" tabindex="-1"></main>
+  <!-- One screen: the classes rail (right in RTL) beside the large pane (lessons / leaderboard / settings) -->
+  <div class="shell">
+    <aside class="panel rail" id="rail" aria-label="الصفوف والنقاط"></aside>
+    <section class="pane">
+      <nav class="pane-tabs" aria-label="التنقل">
+        <button class="tab" data-route="activities"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="11" rx="5"></rect><path d="M7 10.5v4M5 12.5h4"></path><circle cx="16" cy="11.5" r="1" fill="currentColor"></circle><circle cx="18" cy="14" r="1" fill="currentColor"></circle></svg><span>الأنشطة</span></button>
+        <button class="tab" data-route="leaderboard"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"></path></svg><span>لوحة المتصدرين</span></button>
+      </nav>
+      <main id="view" tabindex="-1"></main>
+    </section>
+  </div>
 
   <!-- Load order matters: data → helpers → game engines → views → app -->
   <script>/* data/config.js */
@@ -1937,7 +1974,7 @@ window.UI = (function () {
   function syncInert() {
     const layers = [...document.querySelectorAll('.layer')];
     const top = layers[layers.length - 1];
-    [document.querySelector('.topbar'), document.getElementById('view')].filter(Boolean).concat(layers)
+    [document.querySelector('.topbar'), document.querySelector('.shell')].filter(Boolean).concat(layers)
       .forEach((n) => { n.inert = !!top && n !== top; });
   }
   function layer(className, onClose) {
@@ -2896,6 +2933,9 @@ window.SCOREBOARD = (function () {
   const group = (cid, gid) => ensureClass(cid).groups.find((g) => g.id === gid);
   const classTotal = (cls) => cls.groups.reduce((s, g) => s + g.points, 0);
 
+  // Every change made through these helpers is saved and shown in the rail at once.
+  const commit = () => { save(); changed(); };
+
   // ---------- editing (settings page) ----------
   function addClass() {
     const list = editableList();
@@ -2903,7 +2943,7 @@ window.SCOREBOARD = (function () {
     const id = 'c' + Date.now().toString(36);
     list.push({ id, grade, name: 'صف جديد' });
     ensureClass(id);
-    save();
+    commit();
     return id;
   }
   function renameClass(cid, name) {
@@ -2911,7 +2951,7 @@ window.SCOREBOARD = (function () {
     const v = String(name || '').trim();
     if (!c || !v) return false;
     c.name = v;
-    save();
+    commit();
     return true;
   }
   // The last class can't be deleted: the games need one to take turns in.
@@ -2920,7 +2960,7 @@ window.SCOREBOARD = (function () {
     state().classList = editableList().filter((c) => c.id !== cid);
     delete state().classes[cid];
     if (state().currentClass === cid) state().currentClass = null;
-    save();
+    commit();
     return true;
   }
   function addGroup(cid) {
@@ -2933,32 +2973,32 @@ window.SCOREBOARD = (function () {
     const n = Math.max(0, ...cls.groups.map((g) => parseInt(String(g.id).replace(/\D/g, ''), 10) || 0)) + 1;
     const g = { id: 'g' + n, name: 'مجموعة جديدة', emoji, color, points: 0 };
     cls.groups.push(g);
-    save();
+    commit();
     return g;
   }
   function removeGroup(cid, gid) {
     const cls = ensureClass(cid);
     if (cls.groups.length <= MIN_GROUPS) return false;
     cls.groups = cls.groups.filter((g) => g.id !== gid);
-    save();
+    commit();
     return true;
   }
   function setGroup(cid, gid, patch) {
     const g = group(cid, gid);
     if (!g) return;
     Object.assign(g, patch);
-    save();
+    commit();
   }
 
   // ---------- actions ----------
   // Adds pts to a group, never below 0. Returns the change actually applied.
-  function award(cid, gid, pts) {
+  function rawAward(cid, gid, pts) {
     const g = group(cid, gid);
     if (!g) return 0;
     const before = g.points;
     g.points = Math.max(0, g.points + pts);
     const delta = g.points - before;
-    save();
+    save();   // the caller redraws: the rail itself draws with an animation, other callers use award()
     if (delta > 0) window.FX.sound('point');
     else if (delta < 0) window.FX.sound('minus');
     else if (pts < 0) window.FX.sound('blocked');
@@ -2968,77 +3008,59 @@ window.SCOREBOARD = (function () {
   // Zeroes the points; names, logos and colours stay.
   function resetClass(cid) {
     ensureClass(cid).groups.forEach((g) => { g.points = 0; });
-    save();
+    commit();
   }
 
-  // ---------- view ----------
-  const CROWN = '<svg class="g-crown" width="54" height="54" viewBox="0 0 24 24" fill="currentColor" role="img" aria-label="في الصدارة"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"></path></svg>';
-  const ARROW = '<svg width="88" height="88" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>';
-  const PLUS = '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>';
-  const MINUS = '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg>';
+  // ---------- classes rail ----------
+  // Right-hand section of the one-screen layout, always visible beside the lessons. Two states: every class
+  // (tap one to open it), or one class's groups with + / − and a back button above. The class opened last stays open.
+  const CROWN = '<svg class="g-crown" width="26" height="26" viewBox="0 0 24 24" fill="currentColor" role="img" aria-label="في الصدارة"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"></path></svg>';
+  const BACK = '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>';
+  const PLUS = '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>';
+  const MINUS = '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg>';
 
-  let armedReset = null;   // class whose "reset" button is waiting for its second tap
-  let armTimer;
+  let openCid = null;
+  let railReady = false;
+  const railEl = () => document.getElementById('rail');
 
-  function render(el, parts) {
-    const cid = parts && parts[0];
-    if (cid && classById(cid)) setCurrentClass(cid);
-    window.UI.setTitle('لوحة النقاط');
-    board(el);
-  }
-
-  function board(el, anim) {
-    const list = classes();
-    const sel = selectedId();
-    const meta = sel && classById(sel);
-    const cls = sel && ensureClass(sel);
-
-    const classBtns = list.map((c) => {
-      const k = ensureClass(c.id);
-      return `<button type="button" class="class-btn" data-cid="${esc(c.id)}" aria-pressed="${c.id === sel}">
-          <span class="cb-name" dir="auto">${esc(c.name)}</span>
-          <span class="cb-emojis" aria-hidden="true">${k.groups.map((g) => esc(g.emoji)).join(' ')}</span>
-          <span class="cb-total">${ar(classTotal(k))} نقطة</span>
-        </button>`;
-    }).join('');
-
-    let main;
-    if (!cls) {
-      main = `<div class="board-empty">${ARROW}<p>اختر صفّاً لتبدأ المنافسة</p></div>`;
-    } else {
-      const max = Math.max(...cls.groups.map((g) => g.points));
-      main = `<div class="board-body">
-        <div class="board-head">
-          <h2 class="board-title" dir="auto">${esc(meta.name)}</h2>
-          <button type="button" class="btn outline" data-act="reset">${armedReset === sel ? 'اضغط مرة أخرى للتأكيد' : 'تصفير النقاط'}</button>
-        </div>
-        <div class="group-grid" style="--cols:${cls.groups.length > 4 ? 3 : 2}">${cls.groups.map((g) => {
-          const leader = max > 0 && g.points === max;
-          return `<article class="gcard ${leader ? 'leader' : ''}" data-gid="${g.id}" style="--gc:${g.color}">
-            <div class="gcard-top">
-              <span class="g-emoji" aria-hidden="true">${esc(g.emoji)}</span>
-              <h3 class="g-name">${esc(g.name)}</h3>
-              ${leader ? CROWN : ''}
-            </div>
-            <div class="score-wrap"><span class="g-points">${ar(g.points)}</span></div>
-            <div class="g-btns">
-              <button type="button" class="pbtn minus" data-pts="-1" aria-label="خصم نقطة من مجموعة ${esc(g.name)}">${MINUS}</button>
-              <button type="button" class="pbtn plus" data-pts="1" aria-label="إضافة نقطة لمجموعة ${esc(g.name)}">${PLUS}<span>نقطة</span></button>
-            </div>
-          </article>`;
-        }).join('')}</div>
-      </div>`;
-    }
-
-    el.innerHTML = `<h1 class="vh">لوحة النقاط</h1>
-    <div class="board">
-      <section class="panel">
-        <h2 class="panel-title">الصفوف</h2>
+  function drawRail(el, anim) {
+    if (!railReady) { openCid = selectedId(); railReady = true; }
+    if (openCid && !classById(openCid)) openCid = null;
+    if (!openCid) {
+      const list = classes();
+      el.innerHTML = `<h2 class="panel-title">الصفوف</h2>
         ${list.length ? '' : '<p class="muted">لا توجد صفوف بعد. أضفها من الإعدادات.</p>'}
-        <div class="class-list">${classBtns}</div>
-      </section>
-      <section class="panel board-main">${main}</section>
-    </div>`;
+        <div class="class-list">${list.map((c) => {
+          const k = ensureClass(c.id);
+          return `<button type="button" class="class-btn ${c.id === selectedId() ? 'on' : ''}" data-cid="${esc(c.id)}">
+            <span class="cb-name" dir="auto">${esc(c.name)}</span>
+            <span class="cb-emojis" aria-hidden="true">${k.groups.map((g) => esc(g.emoji)).join(' ')}</span>
+            <span class="cb-total">${classTotal(k)} نقطة</span>
+          </button>`;
+        }).join('')}</div>`;
+      return;
+    }
+    const meta = classById(openCid);
+    const cls = ensureClass(openCid);
+    const max = Math.max(...cls.groups.map((g) => g.points));
+    el.innerHTML = `<div class="rail-head">
+        <button type="button" class="btn outline rail-back" data-act="back" aria-label="العودة إلى كل الصفوف">${BACK}<span>الصفوف</span></button>
+        <h2 class="rail-class" dir="auto">${esc(meta.name)}</h2>
+      </div>
+      <div class="rail-groups">${cls.groups.map((g) => {
+        const leader = max > 0 && g.points === max;
+        return `<article class="rg ${leader ? 'leader' : ''}" data-gid="${g.id}" style="--gc:${g.color}">
+          <div class="rg-top">
+            <span class="g-emoji" aria-hidden="true">${esc(g.emoji)}</span>
+            <h3 class="g-name">${leader ? CROWN : ''}${esc(g.name)}</h3>
+            <div class="score-wrap"><span class="g-points">${g.points}</span></div>
+          </div>
+          <div class="g-btns">
+            <button type="button" class="pbtn minus" data-pts="-1" aria-label="خصم نقطة من مجموعة ${esc(g.name)}">${MINUS}</button>
+            <button type="button" class="pbtn plus" data-pts="1" aria-label="إضافة نقطة لمجموعة ${esc(g.name)}">${PLUS}<span>نقطة</span></button>
+          </div>
+        </article>`;
+      }).join('')}</div>`;
 
     if (anim) {
       const card = el.querySelector(`[data-gid="${anim.gid}"]`);
@@ -3047,50 +3069,145 @@ window.SCOREBOARD = (function () {
         const chip = document.createElement('span');
         chip.className = 'g-chip' + (anim.delta < 0 ? ' neg' : '');
         chip.setAttribute('aria-hidden', 'true');   // decoration: the live region already announces the score
-        chip.textContent = (anim.delta > 0 ? '+' : '−') + ar(Math.abs(anim.delta));
+        chip.textContent = (anim.delta > 0 ? '+' : '−') + Math.abs(anim.delta);
         card.querySelector('.score-wrap').appendChild(chip);
       }
     }
+  }
 
+  // Redraws the rail (keeping the keyboard where it was if it is inside) and tells an open leaderboard to refresh.
+  // A press that starts on the rail is not interrupted: a name field blurs (and saves) the moment the teacher taps
+  // the rail, and redrawing then would swallow that tap. The redraw happens right after the tap instead.
+  let pressed = false;
+  let dirty = false;
+  function changed() {
+    if (pressed) { dirty = true; return; }
+    const el = railEl();
+    if (el) {
+      if (el.contains(document.activeElement)) window.UI.keepFocus(el, () => drawRail(el)); else drawRail(el);
+    }
+    if (window.APP && window.APP.onPoints) window.APP.onPoints();
+  }
+
+  // Awards from outside the rail (the games' "add the points" button).
+  function award(cid, gid, pts) {
+    const d = rawAward(cid, gid, pts);
+    changed();
+    return d;
+  }
+
+  // Shows a class's groups in the rail (used after a game, and by old #scoreboard/<class> links).
+  function openClass(cid) {
+    if (!classById(cid)) return;
+    railReady = true;
+    openCid = cid;
+    setCurrentClass(cid);
+    changed();
+  }
+
+  function initRail() {
+    const el = railEl();
+    if (!el) return;
+    drawRail(el);
+    el.addEventListener('pointerdown', () => { pressed = true; });
+    const release = () => setTimeout(() => {
+      if (!pressed) return;
+      pressed = false;
+      if (dirty) { dirty = false; changed(); }
+    }, 0);
+    document.addEventListener('pointerup', release);
+    document.addEventListener('pointercancel', release);
     el.onclick = (e) => {
-      const c = e.target.closest('[data-cid]');
-      if (c) {
-        armedReset = null;
-        setCurrentClass(c.dataset.cid);
-        window.UI.keepFocus(el, () => board(el));
+      const open = e.target.closest('[data-cid]');
+      if (open) {
+        openCid = open.dataset.cid;
+        setCurrentClass(openCid);
+        drawRail(el);
+        const back = el.querySelector('[data-act="back"]');
+        if (back) back.focus({ preventScroll: true });
+        window.UI.announce('مجموعات ' + classById(openCid).name);
         return;
       }
-      if (e.target.closest('[data-act="reset"]') && sel) {
-        if (armedReset !== sel) {
-          armedReset = sel;
-          clearTimeout(armTimer);
-          armTimer = setTimeout(() => { armedReset = null; if (el.isConnected && selectedId() === sel) board(el); }, 3000);
-          window.UI.keepFocus(el, () => board(el));
-          window.UI.announce('اضغط مرة أخرى لتأكيد تصفير النقاط');
-        } else {
-          armedReset = null;
-          clearTimeout(armTimer);
-          resetClass(sel);
-          window.UI.keepFocus(el, () => board(el));
-          window.UI.toast('🔄 تم تصفير نقاط ' + meta.name);
-        }
+      if (e.target.closest('[data-act="back"]')) {
+        const was = openCid;
+        openCid = null;
+        drawRail(el);
+        const btn = [...el.querySelectorAll('[data-cid]')].find((b) => b.dataset.cid === was);
+        if (btn) btn.focus({ preventScroll: true });
+        window.UI.announce('كل الصفوف');
         return;
       }
       const b = e.target.closest('[data-pts]');
-      if (!b || !sel) return;
+      if (!b || !openCid) return;
       const gid = b.closest('[data-gid]').dataset.gid;
-      const delta = award(sel, gid, +b.dataset.pts);
-      window.UI.keepFocus(el, () => board(el, delta ? { gid, delta } : null));
-      const g = group(sel, gid);
-      window.UI.announce(`${g.name}: ${ar(g.points)} نقطة`);
+      const delta = rawAward(openCid, gid, +b.dataset.pts);
+      window.UI.keepFocus(el, () => drawRail(el, delta ? { gid, delta } : null));
+      const g = group(openCid, gid);
+      window.UI.announce(`${g.name}: ${g.points} نقطة`);
+      if (window.APP.onPoints) window.APP.onPoints();
     };
   }
 
+  const classTotalOf = (cid) => classTotal(ensureClass(cid));
+
   return {
-    render, award, ensureClass, currentClassId, setCurrentClass, group, classesOfGrade, resetClass,
-    classes, classById, addClass, renameClass, removeClass, addGroup, removeGroup, setGroup,
-    PALETTE, EMOJIS, MAX_GROUPS, MIN_GROUPS, ar,
+    initRail, openClass, award, ensureClass, currentClassId, setCurrentClass, group, classesOfGrade, resetClass,
+    classes, classById, classTotal, addClass, renameClass, removeClass, addGroup, removeGroup, setGroup,
+    PALETTE, EMOJIS, MAX_GROUPS, MIN_GROUPS, ar, classTotalOf,
   };
+})();
+</script>
+  <script>/* js/leaderboard.js */
+// Leaderboard (large pane): #leaderboard (groups) or #leaderboard/classes (class totals). Read-only: points are
+// changed from the classes rail. Ties share a rank; the leader wears the crown once it has points.
+window.LEADERBOARD = (function () {
+  const { esc } = window.UI;
+  const SB = () => window.SCOREBOARD;
+  const cfg = () => window.DASH_CONFIG;
+  const CROWN = '<svg viewBox="0 0 24 24" fill="currentColor" role="img" aria-label="في الصدارة"><path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"></path></svg>';
+
+  function rows(mode) {
+    const out = [];
+    SB().classes().forEach((c) => {
+      const cls = SB().ensureClass(c.id);
+      if (mode === 'classes') {
+        const gr = cfg().grades.find((x) => x.grade === c.grade) || {};
+        out.push({ name: c.name, color: gr.color || '#3CC6B0', points: SB().classTotal(cls), meta: cls.groups.length + ' مجموعات' });
+      } else {
+        cls.groups.forEach((g) => out.push({ name: g.name, emoji: g.emoji, color: g.color, points: g.points, meta: c.name }));
+      }
+    });
+    out.sort((a, b) => b.points - a.points);
+    let rank = 0;
+    let prev = null;
+    out.forEach((r, i) => { if (r.points !== prev) { rank = i + 1; prev = r.points; } r.rank = rank; });
+    return out;
+  }
+
+  function render(el, parts) {
+    const mode = parts && parts[0] === 'classes' ? 'classes' : 'groups';
+    window.UI.setTitle('لوحة المتصدرين');
+    const list = rows(mode);
+    const max = list.length ? list[0].points : 0;
+    el.innerHTML = `<h1 class="page-title">لوحة المتصدرين</h1>
+      <div class="lb-filters" role="group" aria-label="العرض">
+        <a class="ctab ${mode === 'groups' ? 'active' : ''}" href="#leaderboard" ${mode === 'groups' ? 'aria-current="true"' : ''}>المجموعات</a>
+        <a class="ctab ${mode === 'classes' ? 'active' : ''}" href="#leaderboard/classes" ${mode === 'classes' ? 'aria-current="true"' : ''}>الصفوف</a>
+      </div>
+      ${list.length ? `<ol class="lb">${list.map((r) => {
+        const first = r.rank === 1 && r.points > 0;
+        return `<li class="lb-row ${first ? 'first' : ''}" style="--gc:${r.color};--w:${max ? Math.round((r.points / max) * 100) : 0}%">
+          <span class="lb-rank">${r.rank}</span>
+          ${r.emoji ? `<span class="lb-emoji" aria-hidden="true">${esc(r.emoji)}</span>` : ''}
+          <span class="lb-name" dir="auto">${first ? CROWN : ''}${esc(r.name)}</span>
+          <span class="lb-meta" dir="auto">${esc(r.meta)}</span>
+          <span class="lb-pts">${r.points}</span>
+          <i class="lb-bar" aria-hidden="true"></i>
+        </li>`;
+      }).join('')}</ol>` : '<p class="muted">لا توجد صفوف بعد. أضفها من الإعدادات.</p>'}`;
+  }
+
+  return { render };
 })();
 </script>
   <script>/* js/activities.js */
@@ -3369,6 +3486,7 @@ window.ACTIVITIES = (function () {
       if (award) {
         award.onclick = () => {
           rows.forEach((g) => SB().award(cid, g.id, tally[g.id]));
+          SB().openClass(cid);
           award.disabled = true;
           award.textContent = '✔ تمت إضافة النقاط';
           window.UI.pop(award, '+' + rows.reduce((s, g) => s + tally[g.id], 0));
@@ -3614,9 +3732,11 @@ window.SETTINGS = (function () {
 })();
 </script>
   <script>/* js/app.js */
-// Boot + hash router: #scoreboard, #scoreboard/<classId>, #settings, #activities, #activities/<gradeId>, #activities/<gradeId>/<lessonId>.
+// Boot + hash router: #activities (home), #activities/<gradeId>, #activities/<gradeId>/<lessonId>, #leaderboard[/classes], #settings.
+// The classes rail beside the pane is always on screen; old #scoreboard[/<classId>] links open that class in the rail.
 (function () {
-  const views = { scoreboard: window.SCOREBOARD, activities: window.ACTIVITIES, settings: window.SETTINGS };
+  const views = { activities: window.ACTIVITIES, leaderboard: window.LEADERBOARD, settings: window.SETTINGS };
+  let current = { name: 'activities', rest: [] };
   const viewEl = document.getElementById('view');
   const state = window.STORE.load();
 
@@ -3671,8 +3791,14 @@ window.SETTINGS = (function () {
   // navigated = a real page change (not a refresh in place): then focus moves to the page's heading, so
   // keyboard and screen-reader users start at the top of the new page.
   function route(navigated) {
-    const parts = location.hash.slice(1).split('/').filter(Boolean).map(decodeURIComponent);
-    const name = views[parts[0]] ? parts[0] : 'scoreboard';
+    let parts = location.hash.slice(1).split('/').filter(Boolean).map(decodeURIComponent);
+    if (parts[0] === 'scoreboard') {              // old link: open that class in the rail, show the lessons
+      if (parts[1]) window.SCOREBOARD.openClass(parts[1]);
+      history.replaceState(null, '', '#activities');
+      parts = ['activities'];
+    }
+    const name = views[parts[0]] ? parts[0] : 'activities';
+    current = { name, rest: parts.slice(1) };
     viewEl.onclick = null;
     viewEl.onchange = null;
     window.UI.setTitle('');                      // each view sets its own
@@ -3689,6 +3815,10 @@ window.SETTINGS = (function () {
     }
   }
   window.APP.refresh = () => route();
+  // Points changed (rail or a game): an open leaderboard follows.
+  window.APP.onPoints = () => {
+    if (current.name === 'leaderboard') window.UI.keepFocus(viewEl, () => views.leaderboard.render(viewEl, current.rest));
+  };
 
   document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click', () => { location.hash = t.dataset.route; }));
   muteBtn.addEventListener('click', () => {
@@ -3720,6 +3850,7 @@ window.SETTINGS = (function () {
 
   window.addEventListener('hashchange', () => { route(true); window.scrollTo(0, 0); });
   window.UI.watchBidi(document.body);
+  window.SCOREBOARD.initRail();
   route();
 
   // The textbook figures are embedded after the app (so the page is usable before they arrive). A lesson page

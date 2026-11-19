@@ -17,7 +17,7 @@
 **الاستخدام في الصف:** تُعرض على شاشة اللمس (Edge/Chrome) ويتقدم الطلبة لللمس — الدور turns بديل بين المجموعات،
 ولكل إجابة صحيحة نقطة واحدة للمجموعة صاحبة الدور. تُحفظ النقاط في المتصفح نفسه (ولسحبها لجهاز آخر أو نسخة احتياطية: ⚙️ ← تصدير).
 
-**الواجهة:** وضعان يبدّلهما زر 🌙/☀️ في الشريط العلوي (يُحفظ الاختيار مع النسخة الاحتياطية): **نهاري «رمل وأقواس»** (الافتراضي) و**ليلي «زمرّد ومصحف»**، بأزرار كبيرة للمس وخطّي El Messiri (العناوين) وBaloo Bhaijaan 2 (مضمّنين داخل الملف، يعمل دون إنترنت). لوحة النقاط في صفحة واحدة: الصفوف على الجانب ومجموعات الصف المختار بجانبها.
+**الواجهة:** وضعان يبدّلهما زر 🌙/☀️ في الشريط العلوي (يُحفظ الاختيار مع النسخة الاحتياطية): **نهاري «رمل وأقواس»** (الافتراضي) و**ليلي «زمرّد ومصحف»**، بأزرار كبيرة للمس وخطّي El Messiri (العناوين) وBaloo Bhaijaan 2 (مضمّنين داخل الملف، يعمل دون إنترنت). الشاشة واحدة: **شريط الصفوف** على اليمين دائمًا (اضغط صفًّا فتظهر مجموعاته مع + / − وزر «الصفوف» للرجوع، ويبقى آخر صف مفتوحًا)، و**اللوحة الكبيرة** على اليسار بتبويبين: الأنشطة، ولوحة المتصدرين (ترتيب المجموعات أو الصفوف بالنقاط). النقاط في الشريط بأرقام 0–9.
 **الإعدادات** (⚙️): إضافة صفوف وحذفها وإعادة تسميتها، وتعديل مجموعات كل صف (٢–٦: الاسم، الشعار، اللون)، ونسخة احتياطية، وتصفير النقاط.
 
 **الفتح:** https://connector6375.github.io/islamic-dashboard/ — أو تنزيل `index.html` وفتحه بنقرة مزدوجة (يعمل دون إنترنت بالكامل).
@@ -40,7 +40,9 @@ the Battle of Uhud, friendship). Built from the textbook pages (2026/27 edition)
 Two themes, switched with the moon/sun button in the top bar and saved in `state.settings.theme`: light "Sand & arches"
 (default) and dark "Emerald & Mushaf" (design handoff on branch `theme-sand-emerald`), on top of the "Classroom Dashboard" layout
 (large touch targets). The stylesheets are exported in `src/styles/`.
-The scoreboard is one split page (classes beside the selected class's groups), and classes and their groups
+One screen: a classes rail on the right (tap a class to see its groups with + / −, back button above; the last class stays
+open) beside a large pane with two tabs, Activities and Leaderboard (read-only ranking of groups or classes; ties share a
+rank). Old `#scoreboard[/<class>]` links open that class in the rail. Classes and their groups
 (2–6 each: name, logo, colour) are edited on the ⚙️ settings page. Saves from before the redesign are upgraded
 automatically (points kept, group colours mapped to the new palette).
 

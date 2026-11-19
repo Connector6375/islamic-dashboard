@@ -10,7 +10,7 @@ body { font-family: var(--font); color: var(--ink); background: var(--bg) fixed;
 }
 
 /* titles: El Messiri; everything else Baloo Bhaijaan 2 */
-:is(.brand, .page-title, .board-title, .lesson-head h1, .sec-title, .section-title, .panel-title, .unit-head, .g-name,
+:is(.brand, .page-title, .rail-class, .lesson-head h1, .sec-title, .section-title, .panel-title, .unit-head, .g-name,
     .modal h2, .result h2, .pick h2, .p-title, .tile b, .ltile b, .gtile b, .info h3, .set-sec h3, .cb-name, .ed-group summary) {
   font-family: var(--font-head);
 }
@@ -31,19 +31,16 @@ body { font-family: var(--font); color: var(--ink); background: var(--bg) fixed;
 :root:not([data-theme="dark"]) :is(.panel, .gtile, .ltile, .tile, .info, .result, .step-card, .quiz-q, .story-card, .fig, .ed-group, .modal, .check) {
   box-shadow: 0 0 0 2px var(--line-soft), 0 6px 18px var(--shadow);
 }
-:root:not([data-theme="dark"]) .gcard { box-shadow: 0 0 0 2px var(--line-soft); }
-:root[data-theme="dark"] :is(.gtile, .ltile, .tile, .info, .result, .step-card, .quiz-q, .story-card, .fig, .ed-group, .modal) {
+:root:not([data-theme="dark"]) :is(.rg, .lb-row) { box-shadow: 0 0 0 2px var(--line-soft); }
+:root[data-theme="dark"] :is(.gtile, .ltile, .tile, .info, .result, .step-card, .quiz-q, .story-card, .fig, .ed-group, .modal, .lb-row) {
   box-shadow: var(--frame), 0 10px 28px var(--shadow);
 }
-:root[data-theme="dark"] .gcard {
+:root[data-theme="dark"] .rg {
   /* sits on --surface-2: same gold double line, inner ring in that colour */
   box-shadow: inset 0 0 0 2px #8C7638, inset 0 0 0 7px var(--surface-2), inset 0 0 0 8px #5A5230, 0 10px 28px var(--shadow);
 }
 
-/* light: score cards and class buttons are mihrab arches */
-:root:not([data-theme="dark"]) .gcard { border-radius: 50% 50% 28px 28px / 64px 64px 28px 28px; padding-top: 38px; }
-:root:not([data-theme="dark"]) .gcard-top { justify-content: center; }
-:root:not([data-theme="dark"]) .g-name { flex: 0 1 auto; }
+/* light: class buttons are mihrab arches */
 :root:not([data-theme="dark"]) .class-btn { border-radius: 50% 50% 22px 22px / 40px 40px 22px 22px; padding-top: 22px; align-items: center; text-align: center; }
 
 /* ---------- games ---------- */
