@@ -17,6 +17,9 @@
 **الاستخدام في الصف:** تُعرض على شاشة اللمس (Edge/Chrome) ويتقدم الطلبة لللمس — الدور turns بديل بين المجموعات،
 ولكل إجابة صحيحة نقطة واحدة للمجموعة صاحبة الدور. تُحفظ النقاط في المتصفح نفسه (ولسحبها لجهاز آخر أو نسخة احتياطية: ⚙️ ← تصدير).
 
+**الواجهة:** تصميم داكن بأزرار كبيرة للمس وخط «Baloo Bhaijaan 2» (مضمّن داخل الملف، يعمل دون إنترنت). لوحة النقاط في صفحة واحدة: الصفوف على الجانب ومجموعات الصف المختار بجانبها.
+**الإعدادات** (⚙️): إضافة صفوف وحذفها وإعادة تسميتها، وتعديل مجموعات كل صف (٢–٦: الاسم، الشعار، اللون)، ونسخة احتياطية، وتصفير النقاط.
+
 **الفتح:** https://<owner>.github.io/islamic-dashboard/ — أو تنزيل `index.html` وفتحه بنقرة مزدوجة (يعمل دون إنترنت بالكامل).
 
 ---
@@ -26,7 +29,12 @@
 A single-file, offline-first gamified classroom dashboard (groups, turn-based touch games, +1/−1 scoreboard)
 for six grade-5 lessons (semester 1: unit 2 — Badr, Islamic brotherhood; unit 4 — rulings of Hajj, Ihram,
 the Battle of Uhud, friendship). Built from the textbook pages (2026/27 edition) and the teacher's prep plans; one self-contained
-`index.html` with no CDNs, fonts, or external images.
+`index.html` with no CDNs or external images; the one web font (Baloo Bhaijaan 2, SIL OFL) is embedded.
+
+The look follows the "Classroom Dashboard" design: dark ground, amber/teal/blue accents, large touch targets.
+The scoreboard is one split page (classes beside the selected class's groups), and classes and their groups
+(2–6 each: name, logo, colour) are edited on the ⚙️ settings page. Saves from before the redesign are upgraded
+automatically (points kept, group colours mapped to the new palette).
 
 ## Updating the lessons
 The dashboard's source project (curriculum data, game engines, build tool, textbook crops) lives on the
