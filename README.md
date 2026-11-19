@@ -22,6 +22,8 @@
 
 **الفتح:** https://connector6375.github.io/islamic-dashboard/ — أو تنزيل `index.html` وفتحه بنقرة مزدوجة (يعمل دون إنترنت بالكامل).
 
+**قابلية الوصول والتثبيت:** اللوحة تعمل بلوحة المفاتيح وقارئات الشاشة (نوافذ حقيقية، وEsc يغلق النوافذ، وإعلان النقاط صوتيًا)، وعند فتحها من رابط https (مثل GitHub Pages) يمكن تثبيتها كتطبيق وتعمل دون إنترنت بعد الزيارة الأولى. فتحها من الملف مباشرة يعمل كما كان.
+
 **نسخة على جهازك تتحدّث تلقائيًا من GitHub:** شغّل مرة واحدة (ويندوز، PowerShell):
 `powershell -ExecutionPolicy Bypass -File tools\sync-from-github.ps1 -Target "<المجلد>" -Install`
 فيُنزَّل آخر ما على الفرع إلى المجلد ويتجدّد كل ١٥ دقيقة. على ماك/لينكس: `sh tools/sync-from-github.sh "<المجلد>"` مع cron. لا يلزم Git ولا حساب (المستودع عام)، ولا يحذف شيئًا من المجلد.
@@ -49,3 +51,16 @@ teacher's machine; this repository contains the built output. Rebuild → replac
 public branch into a local folder: no Git or login needed, nothing in the folder is deleted. With `-Install`
 the PowerShell script also schedules itself (default every 15 minutes). Point `-Target` at a folder that Google
 Drive for desktop syncs and the files reach Drive too, without Drive's 10 MB upload limit.
+
+## Modern-web notes
+- **Accessibility:** WCAG 2.2 AA checked with axe-core on every screen and state (0 violations); overlays are real dialogs
+  (`role="dialog"`, page behind is `inert`, focus moves in and returns, Esc closes modals), route changes update the title and
+  move focus to the heading, scores are announced through a live region, skip link, phone-width tabs keep their names.
+- **Performance:** figures are WebP (−32 %) in a JSON block placed *after* the app, so the page is drawn and usable before they
+  arrive; figures are `loading="lazy"`.
+- **Platform:** CSP (`default-src 'none'`, same-origin network only), `color-scheme`/`theme-color`, safe-area insets, `dvh`,
+  `text-wrap`, forced-colors support, inline favicon.
+- **Installable + offline** when served over https (GitHub Pages): `manifest.webmanifest`, `sw.js` (stale-while-revalidate),
+  `icons/`. The service worker is registered only over http(s); opening `index.html` from disk is unchanged.
+- Known limits: the CSP keeps `'unsafe-inline'` because the app is one file of inline code; the sort game's falling cards are
+  time-based; the file is ~2.1 MB (mostly figures), so Lighthouse's throttled-phone performance score stays modest.
