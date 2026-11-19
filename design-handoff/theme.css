@@ -1,0 +1,179 @@
+/* styles/theme.css */
+/* Two themes, chosen with the 🌙/☀️ button in the top bar (saved in state.settings.theme):
+     light = "رمل وأقواس"  — sand, turquoise, terracotta, mihrab-arch cards
+     dark  = "زمرّد ومصحف" — emerald, gold double-line (Mushaf) frames
+   Type for both: El Messiri for titles, Baloo Bhaijaan 2 for everything else (embedded in fonts.css,
+   so the file still works offline). Loaded AFTER main.css; it only restyles — no layout or behaviour.
+   Group colours (data/config.js) are left as they are. */
+
+:root,
+:root[data-theme="light"] {
+  --font: "Baloo Bhaijaan 2", "Segoe UI", Tahoma, Arial, sans-serif;
+  --font-head: "El Messiri", "Baloo Bhaijaan 2", "Segoe UI", Tahoma, sans-serif;
+
+  --bg: #F4ECDD;
+  --surface: #FFFBF3;          /* cards, modals, question boxes */
+  --surface-2: #F7EFE1;        /* inner fills */
+  --soft: #EFE4CF;             /* chips, ghost buttons, inactive tabs */
+  --line: #DCCBAA;
+  --overlay: rgba(42, 33, 23, .62);
+  --topbar: rgba(255, 251, 243, .95);
+  --accent: #0E7470;           /* replaces the old yellow highlight */
+  --on-accent: #FFFFFF;
+  --accent-2: #A44A22;
+  --tip-bg: #FBEFD2; --tip-fg: #6E4A08;
+  --ok-bg: #E2F0DC;  --ok-fg: #2F6125;
+  --no-bg: #F8DCD6;
+  --score-mix: 0%;             /* group colours shown as-is on light cards */
+
+  /* existing tokens, re-pointed */
+  --ind: #2A2117;              /* headings / dark text on cards */
+  --txt: #2A2117;
+  --text-muted: #65553F;
+  --light: #EFE4CF;
+  --yellow: var(--accent);
+  --pur: #0E7470;
+  --cyan: #2D5AA0;
+  --orange: #A44A22;
+  --green: #3B7530;
+  --red: #B3261E;
+
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0C2A22;
+  --surface: #12372C;
+  --surface-2: #184536;
+  --soft: #1F4E3E;
+  --line: #2F6450;
+  --overlay: rgba(4, 18, 14, .82);
+  --topbar: rgba(10, 36, 29, .94);
+  --accent: #D9B45A;
+  --on-accent: #1F1606;
+  --accent-2: #6FD3B3;
+  --tip-bg: #2E3A1E; --tip-fg: #F1DC9C;
+  --ok-bg: #1E4A33;  --ok-fg: #A8E6BE;
+  --no-bg: #4A2420;
+  --score-mix: 45%;            /* lighten group colours so scores read on the dark cards */
+  --frame: inset 0 0 0 2px #8C7638, inset 0 0 0 7px var(--surface), inset 0 0 0 8px #5A5230;
+
+  --ind: #F4EEDC;
+  --txt: #F4EEDC;
+  --text-muted: #BACBBF;
+  --light: #1F4E3E;
+  --yellow: var(--accent);
+  --pur: #1E7A62;
+  --cyan: #2F6E9E;
+  --orange: #B5582F;
+  --green: #3F7F2E;
+  --red: #C0392B;
+
+  color-scheme: dark;
+}
+
+/* ---------- base ---------- */
+body {
+  font-family: var(--font);
+  color: var(--txt);
+  background: var(--bg) fixed;
+}
+:root[data-theme="dark"] body {
+  /* faint eight-point star lattice */
+  background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Cg fill='none' stroke='%23123A2F' stroke-width='2'%3E%3Cpath d='M48 8l12 28 28 12-28 12-12 28-12-28-28-12 28-12z'/%3E%3Ccircle cx='48' cy='48' r='10'/%3E%3Cpath d='M0 0l20 20M96 0L76 20M0 96l20-20M96 96L76 76'/%3E%3C/g%3E%3C/svg%3E") fixed;
+}
+:is(.brand, .page-title, .class-title, .section-title, .grade-title, .g-name, .modal h2, .result h2, .pick h2, .p-title, .unit-head, .gtile b, .atile b, .ltile b, .info h3, .set-sec h3, .cc-id) {
+  font-family: var(--font-head);
+}
+
+/* ---------- top bar ---------- */
+.topbar {
+  background: var(--topbar);
+  border-bottom: 2px solid var(--line);
+  backdrop-filter: blur(6px);
+}
+:root:not([data-theme="dark"]) .topbar {
+  /* row of small arches under the bar */
+  border-bottom: 0;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='14'%3E%3Cpath d='M2 14V9a20 8 0 0 1 40 0v5' fill='none' stroke='%23C9A877' stroke-width='2'/%3E%3C/svg%3E") repeat-x left bottom / 44px 14px,
+    var(--topbar);
+  padding-bottom: 20px;
+}
+:root[data-theme="dark"] .topbar { border-bottom: 3px double #8C7638; }
+.brand { color: var(--ind); }
+.tab, .icon-btn, .ctab, .pill, .btn.ghost { background: var(--soft); color: var(--txt); }
+.tab.active, .ctab.active, .btn.yellow, #toast, .ed-tag { background: var(--accent); color: var(--on-accent); }
+
+/* ---------- cards ---------- */
+.class-card, .gcard, .modal, .ltile, .info, .p-pop-card, .result, .step-card, .quiz-q, .fig, .ed-group {
+  background: var(--surface);
+  color: var(--txt);
+}
+:root:not([data-theme="dark"]) :is(.class-card, .gcard, .ltile, .info, .result, .step-card, .quiz-q, .fig, .ed-group) {
+  box-shadow: 0 0 0 2px #E6D8BD, 0 6px 18px rgba(90, 64, 30, .12);
+}
+:root[data-theme="dark"] :is(.class-card, .gcard, .ltile, .info, .result, .step-card, .quiz-q, .fig, .ed-group, .modal) {
+  box-shadow: var(--frame), 0 10px 28px rgba(0, 0, 0, .35);
+}
+/* light: score cards are mihrab arches */
+:root:not([data-theme="dark"]) .gcard { border-radius: 160px 160px 26px 26px / 64px 64px 26px 26px; padding-top: 22px; }
+:root:not([data-theme="dark"]) .gcard-top { justify-content: center; }
+:root:not([data-theme="dark"]) .class-card { border-radius: 120px 120px 26px 26px / 48px 48px 26px 26px; }
+.g-points, .cc-pts { color: color-mix(in srgb, var(--gc), #fff var(--score-mix)); }
+.cc-id { color: var(--ind); }
+.earn-row { background: var(--surface-2); color: var(--txt); }
+
+/* ---------- modals, settings, toast ---------- */
+.modal-layer { background: var(--overlay); }
+.modal-x, .modal .btn.ghost, .result .btn.ghost { background: var(--soft); color: var(--txt); }
+.set-sec { border-top-color: var(--line); }
+.in, .ed-ta { background: var(--surface-2); color: var(--txt); border-color: var(--line); }
+.ed-changed .ed-ta { background: var(--tip-bg); border-color: var(--accent); }
+.ed-changed .ed-label { color: var(--tip-fg); }
+.editor-layer, .ed-body { background: var(--bg); }
+.ed-row { border-top-color: var(--line); }
+
+/* ---------- activities ---------- */
+.ltile .n { color: #fff; }
+.vocab div { background: var(--surface-2); }
+.vocab b { color: var(--accent-2); }
+.soon-tag { color: #fff; }
+
+/* ---------- player & games ---------- */
+.player { background: var(--bg); }
+.p-pop { background: linear-gradient(to top, var(--overlay), transparent 60%); }
+.turn { background: var(--soft); color: var(--txt); }
+.turn.on { color: #fff; border-color: var(--surface); box-shadow: 0 0 0 5px var(--accent); }
+.turn .tally { background: rgba(0, 0, 0, .14); }
+.pop-groups .turn { color: #fff; }
+.pop { color: var(--accent); }
+.p-pop-card .why, .step-tip { background: var(--tip-bg); color: var(--tip-fg); }
+.why { background: var(--soft); }
+.check { background: var(--surface); color: var(--txt); }
+.check.on { background: var(--ok-bg); color: var(--ok-fg); }
+.challenge { background: color-mix(in srgb, var(--accent) 14%, transparent); border-color: var(--accent); }
+.step-dots i { background: var(--line); }
+.step-dots i.on { background: var(--accent); }
+
+.sort-arena { background: color-mix(in srgb, var(--txt) 6%, transparent); }
+.sort-item, .chip, .hs-prompt { background: var(--surface); color: var(--txt); }
+.sort-item.hit-ok { background: var(--ok-bg); }
+.sort-item.hit-no, .chip.shake { background: var(--no-bg); }
+
+.mc .back { background: linear-gradient(135deg, var(--pur), color-mix(in srgb, var(--pur), #fff 25%)); }
+:root[data-theme="dark"] .mc .back { box-shadow: inset 0 0 0 3px #8C7638, 0 6px 16px rgba(0, 0, 0, .3); }
+.mc .front { background: var(--surface); }
+.mc .front.sa { color: var(--txt); border-color: var(--pur); }
+.mc .front.sb { color: var(--txt); border-color: var(--cyan); }
+.mc.done .front { background: var(--ok-bg); color: var(--ok-fg); border-color: var(--green); }
+
+.order-prompt { background: var(--soft); }
+.slot { background: color-mix(in srgb, var(--txt) 5%, transparent); border-color: var(--line); }
+.slot .num { background: var(--soft); }
+.slot.filled { background: var(--surface); color: var(--txt); }
+.slot.filled .num { color: #fff; }
+:root[data-theme="dark"] .hs-prompt b { color: #F0A57E; }
+/* textbook crops keep their white paper */
+.hs-stage, .lightbox img, .fig img { background: #fff; }
+.lightbox figcaption { color: #fff; }
