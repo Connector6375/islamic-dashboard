@@ -1,0 +1,12 @@
+{
+  "name": "islamic-dashboard-tests",
+  "private": true,
+  "description": "Browser tests for the classroom dashboard. Needs Node 18+, Playwright with Chromium (npm i -D playwright, then npx playwright install chromium; or a global install) and axe-core (npm install in this folder).",
+  "scripts": {
+    "test": "node run.js",
+    "test:full": "node run.js --full"
+  },
+  "devDependencies": {
+    "axe-core": "^4.10.0"
+  }
+}

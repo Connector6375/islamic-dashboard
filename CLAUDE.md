@@ -49,12 +49,18 @@ Script order inside `index.html`: config, curriculum (`window.CURRICULUM['grade-
 
 ## Testing
 
-There is no test runner in the repo yet. After a change, check with headless Chromium (Playwright is installed globally; `require('playwright')`), through the file URL, in **both themes** and at 1600x900, 1280x800, 1024x768 and 390 px wide:
-- no console or page errors, no horizontal scroll;
-- axe-core (WCAG 2.2 AA + best practice) clean on: home, rail open, leaderboard, settings, a lesson, each game type with its answer popup, the editor, story states;
-- the flows: rail +/−, back and focus, leaderboard follows points, settings edits update the rail, finishing a game and "add the points" opens that class in the rail, backup export/import keeps the theme;
-- the answer popup must not cover the question or choices (checked at 1280x800 and 1024x768).
-Write scripts with the Write tool into the scratchpad; very long inline shell heredocs are blocked by the safety check.
+Browser tests live in `tests/` (headless Chromium through Playwright, which is installed globally in cloud sessions; `axe-core` comes from `npm install` in `tests/`).
+
+```bash
+cd tests && npm install      # once
+node run.js                  # the fast set, about 4 minutes, prints ok/FAIL per test
+node run.js --full           # also plays every story path (slow)
+node run.js flows pwa        # only the named tests
+```
+
+They cover: rail +/−, back and focus, leaderboard following points, settings edits updating the rail, the one-grade home, old routes; focus, dialogs, live region and landmarks; axe-core (WCAG 2.2 AA + best practice) on 20 screens and states in **both themes**; the collapsible text editor; the theme toggle and backup; no sideways scroll at 390 px; finishing a game and adding points; the answer popup never covering the choices at 1280x800, 1024x768 and 1920x1080; installable and offline, and a new version showing on the next open.
+
+**When you change the UI, update the tests in the same change** (selectors break easily), and add a test for new behaviour. Do not keep dead markup only to satisfy an old test. Screenshots and other artefacts go to a temp folder, never into the repo. Write new test scripts with the Write tool: very long inline shell heredocs are blocked by the safety check.
 
 ## Pitfalls already hit
 
