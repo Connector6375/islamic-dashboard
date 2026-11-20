@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Runs the browser tests one after another and prints a summary.
-//   node tests/run.js           the fast set (about 4 minutes)
+//   node tests/run.js           the fast set (about 6 minutes)
 //   node tests/run.js --full    also plays every path of every story (slow)
 //   node tests/run.js flows pwa only the named tests
 // A test fails on a non-zero exit code, a line starting with FAIL, or (axe) any reported violation.

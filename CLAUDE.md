@@ -53,7 +53,7 @@ Browser tests live in `tests/` (headless Chromium through Playwright, which is i
 
 ```bash
 cd tests && npm install      # once
-node run.js                  # the fast set, about 4 minutes, prints ok/FAIL per test
+node run.js                  # the fast set, about 6 minutes (the popup check is most of it), prints ok/FAIL per test
 node run.js --full           # also plays every story path (slow)
 node run.js flows pwa        # only the named tests
 ```
